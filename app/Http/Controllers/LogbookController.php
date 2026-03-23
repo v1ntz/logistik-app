@@ -197,7 +197,7 @@ class LogbookController extends Controller
             $sheet->setCellValue('G' . $row, $logbook->net_weight);
             $sheet->setCellValue('H' . $row, $logbook->headcount);
             $sheet->setCellValue('I' . $row, $logbook->net_weight);
-            $sheet->setCellValue('J' . $row, strtoupper($logbook->additional_costs_notes ?? ''));
+            $sheet->setCellValue('J' . $row, ''); // KET dikosongkan karena untuk catatan sapi sakit/mati
 
             $totalBrotto += $logbook->gross_weight;
             $totalTarra += $logbook->tare_weight;
@@ -231,7 +231,13 @@ class LogbookController extends Controller
 
         // Tanda Tangan
         $sigRow = $row + 3;
-        $sheet->setCellValue('A' . $sigRow, ($request->input('lokasi_ttd') ?: 'Tanjung Priok') . ', ' . ($request->input('tgl_ttd') ?: date('d F Y')));
+        $lokasiInput = $request->input('lokasi_ttd');
+        if (empty($lokasiInput)) {
+            $lokasiTtdText = 'Tanjung Priok, ' . date('d F Y');
+        } else {
+            $lokasiTtdText = $lokasiInput;
+        }
+        $sheet->setCellValue('A' . $sigRow, $lokasiTtdText);
         
         if (file_exists(public_path('logo.png'))) {
             $drawing2 = new Drawing();
