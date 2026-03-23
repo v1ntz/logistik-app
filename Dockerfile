@@ -1,14 +1,18 @@
 # Menggunakan image resmi PHP 8.2 dengan server Apache bawaan
 FROM php:8.2-apache
 
-# Menginstall ekstensi sistem yang dibutuhkan Laravel dan PostgreSQL
+# Menginstall ekstensi sistem yang dibutuhkan Laravel, PostgreSQL, dan Excel (GD)
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     libzip-dev \
     zip \
     unzip \
     git \
- && docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install pdo_mysql pdo_pgsql pgsql zip gd
 
 # Mengaktifkan mod_rewrite Apache untuk URL Laravel yang cantik (tanpa index.php)
 RUN a2enmod rewrite
