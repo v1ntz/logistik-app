@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surat Jalan - SJ{{ str_pad($logbook->id, 5, '0', STR_PAD_LEFT) }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        body { font-family: 'Inter', sans-serif; }
         @media print {
             body { background: white; -webkit-print-color-adjust: exact; color-adjust: exact; }
             .no-print { display: none !important; }
             @page { margin: 15mm; size: A4 portrait; }
         }
-        .kop-title { font-family: Arial, Helvetica, sans-serif; }
-        .kop-address { font-family: 'Times New Roman', Times, serif; }
     </style>
 </head>
 <body class="bg-gray-100 text-black font-sans py-8 print:py-0 print:bg-white flex justify-center">
@@ -34,8 +34,8 @@
                 @endif
                 
                 <div class="text-left text-black">
-                    <h1 class="text-2xl md:text-[26px] font-bold text-[#002060] tracking-wide kop-title uppercase">PT. PRATAMA ANDAL DERMAGA</h1>
-                    <div class="text-[14px] leading-tight mt-1.5 kop-address text-gray-900">
+                    <h1 class="text-2xl md:text-[26px] font-bold text-[#002060] tracking-wide uppercase">PT. PRATAMA ANDAL DERMAGA</h1>
+                    <div class="text-[14px] leading-tight mt-1.5 text-gray-900">
                         <p>Komp. Perkantoran Enggano Megah No. 9-I Lt. 2</p>
                         <p>Jl. Raya Enggano, Tanjung Priok, Jakarta 14310</p>
                         <p>pratamaandaldermaga@gmail.com - Telp. (021) 21697765</p>
