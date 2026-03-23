@@ -1,5 +1,5 @@
-# Menggunakan image resmi PHP 8.2 dengan server Apache bawaan
-FROM php:8.2-apache
+# Menggunakan image resmi PHP 8.3 dengan server Apache bawaan
+FROM php:8.3-apache
 
 # Menginstall ekstensi sistem yang dibutuhkan Laravel, PostgreSQL, dan Excel (GD)
 RUN apt-get update && apt-get install -y \
