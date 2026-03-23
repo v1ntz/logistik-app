@@ -250,11 +250,11 @@ class LogbookController extends Controller
         // Save & Download
         $writer = new Xlsx($spreadsheet);
         $fileName = 'Rekap_Logbook_' . date('Ymd_His') . '.xlsx';
-        
-        ob_end_clean(); // Clean buffer
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
-        $writer->save('php://output');
-        exit;
+
+        return response()->streamDownload(function() use ($writer) {
+            $writer->save('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
     }
 }
