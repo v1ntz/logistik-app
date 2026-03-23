@@ -7,7 +7,7 @@
         Data Logbook Operasional
     </h2>
     <div class="flex space-x-3 w-full sm:w-auto">
-        <button id="btnExportExcel" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 shadow transition transform hover:-translate-y-0.5 rounded-lg flex items-center justify-center">
+        <button type="button" onclick="document.getElementById('exportModal').classList.remove('hidden')" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 shadow transition transform hover:-translate-y-0.5 rounded-lg flex items-center justify-center">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             Export Rekap Excel
         </button>
@@ -145,114 +145,69 @@
     </table>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
-<script>
-document.getElementById('btnExportExcel').addEventListener('click', async function() {
-    const originalText = this.innerHTML;
-    this.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Menyusun Excel...';
-    this.disabled = true;
-
-    try {
-        const urlParams = new URLSearchParams(window.location.search);
-        let exportUrl = '{{ route('logbooks.export') }}';
-        if (urlParams.has('start_date') && urlParams.has('end_date')) {
-            exportUrl += `?start_date=${urlParams.get('start_date')}&end_date=${urlParams.get('end_date')}`;
-        }
-        
-        const response = await fetch(exportUrl);
-        const logbooks = await response.json();
-
-        const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'PT. Pratama Andal Dermaga';
-        workbook.lastModifiedBy = 'PT. Pratama Andal Dermaga';
-        workbook.created = new Date();
-        workbook.modified = new Date();
-
-        const worksheet = workbook.addWorksheet('Rekap Logbook', {views:[{state: 'frozen', ySplit: 1}]});
-
-        worksheet.columns = [
-            { header: 'ID', key: 'id', width: 10 },
-            { header: 'Tanggal', key: 'date', width: 22 },
-            { header: 'Driver', key: 'driver', width: 25 },
-            { header: 'Nopol', key: 'nopol', width: 15 },
-            { header: 'PIC Driver', key: 'pic', width: 20 },
-            { header: 'Importir', key: 'supplier', width: 25 },
-            { header: 'Jenis Sapi', key: 'sapi', width: 20 },
-            { header: 'Status', key: 'status', width: 15 },
-            { header: 'Headcount', key: 'headcount', width: 15 },
-            { header: 'Gross (KG)', key: 'gross', width: 18 },
-            { header: 'Tare (KG)', key: 'tare', width: 18 },
-            { header: 'Net (KG)', key: 'net', width: 18 },
-            { header: 'Base Uang Jalan', key: 'base', width: 22 },
-            { header: 'Biaya Ekstra', key: 'extra', width: 20 },
-            { header: 'Keterangan Ekstra', key: 'notes', width: 30 },
-            { header: 'Total Uang', key: 'total', width: 22 },
-        ];
-
-        worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 12 };
-        worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF16A34A' } };
-        worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
-
-        logbooks.forEach(log => {
-            const supplierName = log.supplier ? log.supplier.name : '-';
-            const sapiName = (log.cattleType || log.cattle_type) ? (log.cattleType || log.cattle_type).name : '-';
-            const baseRoute = log.route ? parseFloat(log.route.driver_money) : 0;
-            const extra = parseFloat(log.additional_costs || 0);
-            
-            worksheet.addRow({
-                id: log.id,
-                date: new Date(log.created_at).toLocaleString('id-ID'),
-                driver: log.driver_name,
-                nopol: log.license_plate,
-                pic: log.pic_name,
-                supplier: supplierName,
-                sapi: sapiName,
-                status: log.status,
-                headcount: log.headcount || 0,
-                gross: log.gross_weight ? parseFloat(log.gross_weight) : 0,
-                tare: log.tare_weight ? parseFloat(log.tare_weight) : 0,
-                net: log.net_weight ? parseFloat(log.net_weight) : 0,
-                base: baseRoute,
-                extra: extra,
-                notes: log.additional_costs_notes || '-',
-                total: baseRoute + extra,
-            });
-        });
-
-        worksheet.autoFilter = 'A1:P1';
-        worksheet.eachRow((row, rowNumber) => {
-            if(rowNumber > 1) {
-                row.getCell('base').numFmt = '"Rp" #,##0';
-                row.getCell('extra').numFmt = '"Rp" #,##0';
-                row.getCell('total').numFmt = '"Rp" #,##0';
-                row.getCell('gross').numFmt = '#,##0.00 "KG"';
-                row.getCell('tare').numFmt = '#,##0.00 "KG"';
-                row.getCell('net').numFmt = '#,##0.00 "KG"';
-            }
-        });
-
-        const buffer = await workbook.xlsx.writeBuffer();
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        
-        const startDate = urlParams.get('start_date') || 'ALL';
-        const endDate = urlParams.get('end_date') || 'ALL';
-        a.download = `Rekap_Logistik_Sapi_${startDate}_to_${endDate}.xlsx`;
-        
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-
-    } catch (error) {
-        console.error('Failed to generate Excel:', error);
-        alert('Gagal mendownload file Excel. Data tidak tersedia atau terjadi kesalahan sistem.');
-    } finally {
-        this.innerHTML = originalText;
-        this.disabled = false;
-    }
-});
-</script>
+<!-- Export Modal -->
+<div id="exportModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="document.getElementById('exportModal').classList.add('hidden')"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full">
+            <form action="{{ route('logbooks.export') }}" method="GET">
+                <input type="hidden" name="start_date" value="{{ request('start_date') }}">
+                <input type="hidden" name="end_date" value="{{ request('end_date') }}">
+                
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-bold text-gray-900 border-b pb-2" id="modal-title">Parameter Kop Surat Excel</h3>
+                            <p class="text-xs text-gray-500 mt-1 mb-4">Kosongkan jika tidak ingin dicetak di Excel.</p>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase">Nama Kapal</label>
+                                    <input type="text" name="nama_kapal" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: MV. BALHA ONE">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase">ETA</label>
+                                    <input type="text" name="eta" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 22-Mar-26">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase">Kade</label>
+                                    <input type="text" name="kade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 114">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase">Consignee</label>
+                                    <input type="text" name="consignee" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: PT. CINTA ASIH FARM">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase">Party</label>
+                                    <input type="text" name="party" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 60 EKOR">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase">Tipe Sapi</label>
+                                    <input type="text" name="tipe_sapi" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: MEDIUM HEIFERS">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mt-2">Lokasi/Tgl TTD</label>
+                                    <input type="text" name="lokasi_ttd" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Tanjung Priok, 22 Maret 2026">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mt-2">Nama TTD</label>
+                                    <input type="text" name="nama_ttd" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: LIAN">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t">
+                    <button type="submit" onclick="document.getElementById('exportModal').classList.add('hidden')" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-bold text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                        Download Excel
+                    </button>
+                    <button type="button" onclick="document.getElementById('exportModal').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-bold text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
