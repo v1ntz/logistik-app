@@ -10,6 +10,7 @@ php artisan route:clear
 # Menjalankan migrasi database ke PostgreSQL (dengan force karena ini env production)
 echo "Menjalankan migrasi Database..."
 php artisan migrate --force
+php artisan db:seed --force
 
 # Membersihkan cache setelah tabel dibuat
 php artisan cache:clear
