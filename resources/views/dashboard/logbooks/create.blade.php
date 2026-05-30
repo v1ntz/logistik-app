@@ -44,6 +44,30 @@
             @endif
         </div>
 
+        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">III. Detail Pengapalan & Bongkar (Opsional)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Nama Kapal</label>
+                <input type="text" name="nama_kapal" placeholder="Contoh: MV. BALHA ONE" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">ETA</label>
+                <input type="text" name="eta" placeholder="Contoh: 22-Mar-26" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Kade</label>
+                <input type="text" name="kade" placeholder="Contoh: 114" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Consignee</label>
+                <input type="text" name="consignee" placeholder="Contoh: PT. CINTA ASIH FARM" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Party</label>
+                <input type="text" name="party" placeholder="Contoh: 60 EKOR" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            </div>
+        </div>
+
         <div class="flex items-center justify-end space-x-4 pt-6 mt-4 border-t border-gray-100">
             <a href="{{ route('logbooks.index') }}" class="inline-block align-baseline font-bold text-gray-500 hover:text-gray-800 transition">
                 Batalkan Draft

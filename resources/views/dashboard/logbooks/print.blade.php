@@ -51,72 +51,84 @@
         </div>
 
         <!-- BODY SURAT -->
-        <div class="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
+        <div class="grid grid-cols-3 gap-x-6 gap-y-6 mb-8 border-b border-gray-300 pb-6">
             
             <!-- INFORMASI PENGIRIMAN -->
             <div class="col-span-1">
-                <h3 class="font-bold text-black uppercase border-b border-black pb-1.5 mb-3 text-sm tracking-wider">Informasi Kendaraan & Rute</h3>
-                <table class="w-full text-xs leading-relaxed">
-                    <tr><td class="py-1.5 align-top w-1/3 font-medium text-gray-700">Driver</td><td class="py-1.5 align-top font-bold text-black">: {{ $logbook->driver_name }}</td></tr>
-                    <tr><td class="py-1.5 align-top font-medium text-gray-700">No. Polisi</td><td class="py-1.5 align-top font-bold text-black">: {{ strtoupper($logbook->license_plate) }}</td></tr>
-                    <tr><td class="py-1.5 align-top font-medium text-gray-700">PIC / Penanggung</td><td class="py-1.5 align-top font-bold text-black">: {{ $logbook->pic_name }}</td></tr>
-                    <tr><td class="py-1.5 align-top font-medium text-gray-700">Rute Asal</td><td class="py-1.5 align-top font-bold text-black">: {{ optional($logbook->route)->origin ?? '-' }}</td></tr>
-                    <tr><td class="py-1.5 align-top font-medium text-gray-700">Rute Tujuan</td><td class="py-1.5 align-top font-bold text-black">: {{ optional($logbook->route)->destination ?? '-' }}</td></tr>
+                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">1. Kendaraan & Rute</h3>
+                <table class="w-full text-[11px] leading-relaxed">
+                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Driver</td><td class="py-1 font-bold text-black">: {{ $logbook->driver_name }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">No. Polisi</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->license_plate) }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">PIC Jaga</td><td class="py-1 font-bold text-black">: {{ $logbook->pic_name }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Rute Asal</td><td class="py-1 font-bold text-black">: {{ optional($logbook->route)->origin ?? '-' }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Tujuan</td><td class="py-1 font-bold text-black">: {{ optional($logbook->route)->destination ?? '-' }}</td></tr>
+                </table>
+            </div>
+
+            <!-- INFORMASI KAPAL -->
+            <div class="col-span-1">
+                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">2. Kapal & Bongkar</h3>
+                <table class="w-full text-[11px] leading-relaxed">
+                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Nama Kapal</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->nama_kapal ?? '-') }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">ETA</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->eta ?? '-') }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Kade</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->kade ?? '-') }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Party</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->party ?? '-') }}</td></tr>
                 </table>
             </div>
 
             <!-- INFORMASI MUATAN -->
             <div class="col-span-1">
-                <h3 class="font-bold text-black uppercase border-b border-black pb-1.5 mb-3 text-sm tracking-wider">Spesifikasi Muatan</h3>
-                <table class="w-full text-xs leading-relaxed">
-                    <tr><td class="py-1.5 align-top w-1/3 font-medium text-gray-700">Importir</td><td class="py-1.5 align-top font-bold text-black">: {{ strtoupper(optional($logbook->supplier)->name ?? '-') }}</td></tr>
-                    <tr><td class="py-1.5 align-top font-medium text-gray-700">Jenis Ternak</td><td class="py-1.5 align-top font-bold text-black">: SAPI {{ strtoupper(optional($logbook->cattleType)->name ?? '-') }}</td></tr>
-                    <tr><td class="py-1.5 align-top font-medium text-gray-700">Jumlah Ekor</td><td class="py-1.5 align-top font-bold text-black">: {{ $logbook->headcount }} Ekor</td></tr>
+                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">3. Spesifikasi Kargo</h3>
+                <table class="w-full text-[11px] leading-relaxed">
+                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Consignee</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->consignee ?? '-') }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Importir</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($logbook->supplier)->name ?? '-') }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Tipe Sapi</td><td class="py-1 font-bold text-black">: SAPI {{ strtoupper(optional($logbook->cattleType)->name ?? '-') }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Jumlah</td><td class="py-1 font-bold text-black">: {{ $logbook->headcount }} Ekor</td></tr>
                 </table>
             </div>
             
-            <!-- TIKET TIMBANG KOTAK TERTUTUP -->
-            <div class="col-span-2 mt-4">
-                <h3 class="font-bold text-black uppercase mb-2 text-sm tracking-wider">Hasil Timbang Kargo</h3>
-                <div class="border-2 border-black">
-                    <div class="grid grid-cols-3 divide-x-2 divide-black text-center text-sm">
-                        <div class="py-3">
-                            <div class="text-xs font-semibold text-gray-600 uppercase mb-1">Gross Weight</div>
-                            <div class="font-bold text-lg text-black">{{ number_format($logbook->gross_weight, 2) }} KG</div>
-                        </div>
-                        <div class="py-3">
-                            <div class="text-xs font-semibold text-gray-600 uppercase mb-1">Tare Weight</div>
-                            <div class="font-bold text-lg text-black">{{ number_format($logbook->tare_weight, 2) }} KG</div>
-                        </div>
-                        <div class="py-3 bg-gray-100 print:bg-gray-100 print-exact">
-                            <div class="text-xs font-bold text-black uppercase mb-1">Net Weight</div>
-                            <div class="font-black text-xl text-black">{{ number_format($logbook->net_weight, 2) }} KG</div>
-                        </div>
+        </div>
+
+        <!-- TIKET TIMBANG KOTAK TERTUTUP -->
+        <div class="mb-8">
+            <h3 class="font-bold text-black uppercase mb-2 text-sm tracking-wider">Hasil Timbang Kargo</h3>
+            <div class="border-2 border-black">
+                <div class="grid grid-cols-3 divide-x-2 divide-black text-center text-sm">
+                    <div class="py-3">
+                        <div class="text-xs font-semibold text-gray-600 uppercase mb-1">Gross Weight</div>
+                        <div class="font-bold text-lg text-black">{{ number_format($logbook->gross_weight, 2) }} KG</div>
+                    </div>
+                    <div class="py-3">
+                        <div class="text-xs font-semibold text-gray-600 uppercase mb-1">Tare Weight</div>
+                        <div class="font-bold text-lg text-black">{{ number_format($logbook->tare_weight, 2) }} KG</div>
+                    </div>
+                    <div class="py-3 bg-gray-100 print:bg-gray-100 print-exact">
+                        <div class="text-xs font-bold text-black uppercase mb-1">Net Weight</div>
+                        <div class="font-black text-xl text-black">{{ number_format($logbook->net_weight, 2) }} KG</div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- KEUANGAN SUPIR -->
-            <div class="col-span-2 mt-4">
-                <h3 class="font-bold text-black border-b border-black pb-1 mb-2 text-sm tracking-wider">Disbursement Operasional Driver</h3>
-                <table class="w-full text-xs text-left mb-2">
-                    <tr class="border-b border-gray-300 border-dashed">
-                        <td class="py-2 text-gray-800">Uang Jalan Rute ({{ optional($logbook->route)->origin }} - {{ optional($logbook->route)->destination }})</td>
-                        <td class="py-2 text-right font-bold text-black w-1/3">Rp {{ number_format(optional($logbook->route)->driver_money ?? 0, 0, ',', '.') }}</td>
-                    </tr>
-                    @if($logbook->additional_costs > 0)
-                    <tr class="border-b border-gray-300 border-dashed">
-                        <td class="py-2 text-gray-800">Tambahan (Susulan): <i class="text-gray-600">{{ $logbook->additional_costs_notes }}</i></td>
-                        <td class="py-2 text-right font-bold text-black">Rp {{ number_format($logbook->additional_costs, 0, ',', '.') }}</td>
-                    </tr>
-                    @endif
-                    <tr>
-                        <td class="py-3 font-bold text-sm text-black uppercase text-right pr-4">Total Diterima Driver:</td>
-                        <td class="py-3 text-right font-black text-black text-base">Rp {{ number_format((optional($logbook->route)->driver_money ?? 0) + ($logbook->additional_costs ?? 0), 0, ',', '.') }}</td>
-                    </tr>
-                </table>
-            </div>
-
+        <!-- KEUANGAN SUPIR -->
+        <div class="mb-8">
+            <h3 class="font-bold text-black border-b border-black pb-1 mb-2 text-sm tracking-wider">Disbursement Operasional Driver</h3>
+            <table class="w-full text-xs text-left mb-2">
+                <tr class="border-b border-gray-300 border-dashed">
+                    <td class="py-2 text-gray-800">Uang Jalan Rute ({{ optional($logbook->route)->origin }} - {{ optional($logbook->route)->destination }})</td>
+                    <td class="py-2 text-right font-bold text-black w-1/3">Rp {{ number_format(optional($logbook->route)->driver_money ?? 0, 0, ',', '.') }}</td>
+                </tr>
+                @if($logbook->additional_costs > 0)
+                <tr class="border-b border-gray-300 border-dashed">
+                    <td class="py-2 text-gray-800">Tambahan (Susulan): <i class="text-gray-600">{{ $logbook->additional_costs_notes }}</i></td>
+                    <td class="py-2 text-right font-bold text-black">Rp {{ number_format($logbook->additional_costs, 0, ',', '.') }}</td>
+                </tr>
+                @endif
+                <tr>
+                    <td class="py-3 font-bold text-sm text-black uppercase text-right pr-4">Total Diterima Driver:</td>
+                    <td class="py-3 text-right font-black text-black text-base">Rp {{ number_format((optional($logbook->route)->driver_money ?? 0) + ($logbook->additional_costs ?? 0), 0, ',', '.') }}</td>
+                </tr>
+            </table>
         </div>
 
         <!-- TANDA TANGAN -->

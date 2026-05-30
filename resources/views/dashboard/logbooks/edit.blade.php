@@ -104,6 +104,33 @@
             </div>
         </div>
 
+        <!-- Detail Pengapalan & Bongkar -->
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-8 relative">
+            <h3 class="text-lg font-black text-blue-900 mb-4 uppercase tracking-wide">Detail Pengapalan & Bongkar (Opsional)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-3">
+                    <label class="block text-gray-700 text-sm font-bold">Nama Kapal</label>
+                    <input type="text" name="nama_kapal" placeholder="Contoh: MV. BALHA ONE" value="{{ $logbook->nama_kapal }}" class="shadow-inner appearance-none border-2 border-blue-300 rounded-xl w-full py-3 px-4 text-md font-bold text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-500 transition">
+                </div>
+                <div class="space-y-3">
+                    <label class="block text-gray-700 text-sm font-bold">ETA</label>
+                    <input type="text" name="eta" placeholder="Contoh: 22-Mar-26" value="{{ $logbook->eta }}" class="shadow-inner appearance-none border-2 border-blue-300 rounded-xl w-full py-3 px-4 text-md font-bold text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-500 transition">
+                </div>
+                <div class="space-y-3">
+                    <label class="block text-gray-700 text-sm font-bold">Kade</label>
+                    <input type="text" name="kade" placeholder="Contoh: 114" value="{{ $logbook->kade }}" class="shadow-inner appearance-none border-2 border-blue-300 rounded-xl w-full py-3 px-4 text-md font-bold text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-500 transition">
+                </div>
+                <div class="space-y-3">
+                    <label class="block text-gray-700 text-sm font-bold">Consignee</label>
+                    <input type="text" name="consignee" placeholder="Contoh: PT. CINTA ASIH FARM" value="{{ $logbook->consignee }}" class="shadow-inner appearance-none border-2 border-blue-300 rounded-xl w-full py-3 px-4 text-md font-bold text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-500 transition">
+                </div>
+                <div class="md:col-span-2 space-y-3">
+                    <label class="block text-gray-700 text-sm font-bold">Party</label>
+                    <input type="text" name="party" placeholder="Contoh: 60 EKOR" value="{{ $logbook->party }}" class="shadow-inner appearance-none border-2 border-blue-300 rounded-xl w-full py-3 px-4 text-md font-bold text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-500 transition">
+                </div>
+            </div>
+        </div>
+
         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-8 relative">
             <h3 class="text-lg font-black text-yellow-800 mb-4 uppercase tracking-wide">Biaya Ekstra & Uang Susul (Opsional)</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">

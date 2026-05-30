@@ -11,7 +11,8 @@ class Logbook extends Model
     protected $fillable = [
         'status', 'headcount', 'gross_weight', 'tare_weight', 'net_weight',
         'driver_name', 'license_plate', 'route_id', 'pic_name',
-        'cattle_type_id', 'supplier_id', 'additional_costs', 'additional_costs_notes'
+        'cattle_type_id', 'supplier_id', 'additional_costs', 'additional_costs_notes',
+        'nama_kapal', 'eta', 'kade', 'consignee', 'party'
     ];
 
     public function route()

@@ -58,7 +58,12 @@ class LogbookController extends Controller
             'gross_weight' => 'required|numeric|min:0',
             'tare_weight' => 'required|numeric|min:0',
             'additional_costs' => 'nullable|numeric|min:0',
-            'additional_costs_notes' => 'nullable|string'
+            'additional_costs_notes' => 'nullable|string',
+            'nama_kapal' => 'nullable|string',
+            'eta' => 'nullable|string',
+            'kade' => 'nullable|string',
+            'consignee' => 'nullable|string',
+            'party' => 'nullable|string'
         ]);
         
         $net_weight = $request->gross_weight - $request->tare_weight;
@@ -71,6 +76,11 @@ class LogbookController extends Controller
             'net_weight' => $net_weight,
             'additional_costs' => $request->additional_costs ?? 0,
             'additional_costs_notes' => $request->additional_costs_notes,
+            'nama_kapal' => $request->nama_kapal,
+            'eta' => $request->eta,
+            'kade' => $request->kade,
+            'consignee' => $request->consignee,
+            'party' => $request->party,
             'status' => 'Selesai'
         ]);
         return redirect()->route('logbooks.index')->with('success', 'Penimbangan selesai.');
@@ -150,15 +160,24 @@ class LogbookController extends Controller
             $drawing->setWorksheet($sheet);
         }
 
+        // Ambil data default dari logbook pertama jika form kosong
+        $firstLogbook = $logbooks->first();
+        $defaultNamaKapal = $firstLogbook->nama_kapal ?? '';
+        $defaultEta = $firstLogbook->eta ?? '';
+        $defaultKade = $firstLogbook->kade ?? '';
+        $defaultConsignee = $firstLogbook->consignee ?? '';
+        $defaultParty = $firstLogbook->party ?? '';
+        $defaultTipeSapi = optional($firstLogbook->cattleType)->name ?? '';
+
         // METADATA KAPAL DLL
-        $sheet->setCellValue('A6', 'NAMA KAPAL'); $sheet->setCellValue('B6', ':'); $sheet->setCellValue('C6', strtoupper($request->input('nama_kapal', '')));
-        $sheet->setCellValue('A7', 'ETA');        $sheet->setCellValue('B7', ':'); $sheet->setCellValue('C7', strtoupper($request->input('eta', '')));
-        $sheet->setCellValue('A8', 'KADE');       $sheet->setCellValue('B8', ':'); $sheet->setCellValue('C8', strtoupper($request->input('kade', '')));
-        $sheet->setCellValue('A9', 'CONSIGNEE');  $sheet->setCellValue('B9', ':'); $sheet->setCellValue('C9', strtoupper($request->input('consignee', '')));
-        $sheet->setCellValue('A10', 'PARTY');     $sheet->setCellValue('B10', ':'); $sheet->setCellValue('C10', strtoupper($request->input('party', '')));
+        $sheet->setCellValue('A6', 'NAMA KAPAL'); $sheet->setCellValue('B6', ':'); $sheet->setCellValue('C6', strtoupper($request->input('nama_kapal', $defaultNamaKapal)));
+        $sheet->setCellValue('A7', 'ETA');        $sheet->setCellValue('B7', ':'); $sheet->setCellValue('C7', strtoupper($request->input('eta', $defaultEta)));
+        $sheet->setCellValue('A8', 'KADE');       $sheet->setCellValue('B8', ':'); $sheet->setCellValue('C8', strtoupper($request->input('kade', $defaultKade)));
+        $sheet->setCellValue('A9', 'CONSIGNEE');  $sheet->setCellValue('B9', ':'); $sheet->setCellValue('C9', strtoupper($request->input('consignee', $defaultConsignee)));
+        $sheet->setCellValue('A10', 'PARTY');     $sheet->setCellValue('B10', ':'); $sheet->setCellValue('C10', strtoupper($request->input('party', $defaultParty)));
         
         $sheet->mergeCells('I10:J10');
-        $sheet->setCellValue('I10', strtoupper($request->input('tipe_sapi', '')));
+        $sheet->setCellValue('I10', strtoupper($request->input('tipe_sapi', $defaultTipeSapi)));
         $sheet->getStyle('I10:J10')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
         $sheet->getStyle('I10:J10')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
