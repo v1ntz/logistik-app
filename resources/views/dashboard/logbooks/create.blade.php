@@ -47,6 +47,15 @@
         <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">III. Detail Pengapalan & Bongkar (Opsional)</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
             <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Supplier (Luar Negeri)</label>
+                <select name="exporter_id" class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white transition cursor-pointer">
+                    <option value="">-- Pilih Supplier Luar Negeri --</option>
+                    @foreach($exporters as $exporter)
+                        <option value="{{ $exporter->id }}">{{ strtoupper($exporter->name) }} ({{ $exporter->location ?? '-' }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2">Nama Kapal</label>
                 <input type="text" name="nama_kapal" placeholder="Contoh: MV. BALHA ONE" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
             </div>

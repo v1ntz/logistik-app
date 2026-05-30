@@ -12,7 +12,7 @@ class Logbook extends Model
         'status', 'headcount', 'gross_weight', 'tare_weight', 'net_weight',
         'driver_name', 'license_plate', 'route_id', 'pic_name',
         'cattle_type_id', 'supplier_id', 'additional_costs', 'additional_costs_notes',
-        'nama_kapal', 'eta', 'kade', 'consignee', 'party'
+        'nama_kapal', 'eta', 'kade', 'consignee', 'party', 'exporter_id'
     ];
 
     public function route()
@@ -28,5 +28,10 @@ class Logbook extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function exporter()
+    {
+        return $this->belongsTo(Exporter::class);
     }
 }

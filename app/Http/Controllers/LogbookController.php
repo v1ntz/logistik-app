@@ -35,7 +35,8 @@ class LogbookController extends Controller
 
     public function create() {
         $routes = Route::all();
-        return view('dashboard.logbooks.create', compact('routes'));
+        $exporters = \App\Models\Exporter::all();
+        return view('dashboard.logbooks.create', compact('routes', 'exporters'));
     }
 
     public function store(Request $request) {
@@ -47,13 +48,15 @@ class LogbookController extends Controller
     public function edit(Logbook $logbook) {
         $cattleTypes = CattleType::all();
         $suppliers = Supplier::all();
-        return view('dashboard.logbooks.edit', compact('logbook', 'cattleTypes', 'suppliers'));
+        $exporters = \App\Models\Exporter::all();
+        return view('dashboard.logbooks.edit', compact('logbook', 'cattleTypes', 'suppliers', 'exporters'));
     }
 
     public function update(Request $request, Logbook $logbook) {
         $request->validate([
             'supplier_id' => 'required|exists:suppliers,id',
             'cattle_type_id' => 'required|exists:cattle_types,id',
+            'exporter_id' => 'nullable|exists:exporters,id',
             'headcount' => 'required|integer|min:1',
             'gross_weight' => 'required|numeric|min:0',
             'tare_weight' => 'required|numeric|min:0',
@@ -70,6 +73,7 @@ class LogbookController extends Controller
         $logbook->update([
             'supplier_id' => $request->supplier_id,
             'cattle_type_id' => $request->cattle_type_id,
+            'exporter_id' => $request->exporter_id,
             'headcount' => $request->headcount,
             'gross_weight' => $request->gross_weight,
             'tare_weight' => $request->tare_weight,

@@ -9,6 +9,7 @@ use App\Http\Controllers\CattleTypeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ExporterController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
@@ -24,6 +25,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::resource('routes', RouteController::class)->except(['show']);
     Route::resource('cattle-types', CattleTypeController::class)->except(['show']);
     Route::resource('suppliers', SupplierController::class)->except(['show']);
+    Route::resource('exporters', ExporterController::class)->except(['show']);
     Route::resource('users', UserController::class)->except(['show']);
     Route::get('/logbooks/{logbook}/print', [LogbookController::class, 'print'])->name('logbooks.print');
 });

@@ -108,6 +108,15 @@
         <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-8 relative">
             <h3 class="text-lg font-black text-blue-900 mb-4 uppercase tracking-wide">Detail Pengapalan & Bongkar (Opsional)</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="md:col-span-2 space-y-3">
+                    <label class="block text-gray-700 text-sm font-bold">Supplier (Luar Negeri)</label>
+                    <select name="exporter_id" class="shadow-inner border-2 border-blue-300 rounded-xl w-full py-3 px-4 text-md font-bold text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-500 bg-white transition cursor-pointer">
+                        <option value="">-- Pilih Supplier Luar Negeri --</option>
+                        @foreach($exporters as $exporter)
+                            <option value="{{ $exporter->id }}" {{ $logbook->exporter_id == $exporter->id ? 'selected' : '' }}>{{ strtoupper($exporter->name) }} ({{ $exporter->location ?? '-' }})</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="space-y-3">
                     <label class="block text-gray-700 text-sm font-bold">Nama Kapal</label>
                     <input type="text" name="nama_kapal" placeholder="Contoh: MV. BALHA ONE" value="{{ $logbook->nama_kapal }}" class="shadow-inner appearance-none border-2 border-blue-300 rounded-xl w-full py-3 px-4 text-md font-bold text-gray-800 focus:outline-none focus:ring-0 focus:border-blue-500 transition">

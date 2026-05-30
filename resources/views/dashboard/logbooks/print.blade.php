@@ -69,7 +69,8 @@
             <div class="col-span-1">
                 <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">2. Kapal & Bongkar</h3>
                 <table class="w-full text-[11px] leading-relaxed">
-                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Nama Kapal</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->nama_kapal ?? '-') }}</td></tr>
+                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Supplier</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($logbook->exporter)->name ?? '-') }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Nama Kapal</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->nama_kapal ?? '-') }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">ETA</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->eta ?? '-') }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Kade</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->kade ?? '-') }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Party</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->party ?? '-') }}</td></tr>
