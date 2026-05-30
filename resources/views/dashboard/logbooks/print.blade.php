@@ -84,6 +84,14 @@
                     <tr><td class="py-1 font-medium text-gray-600">Importir</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($logbook->supplier)->name ?? '-') }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Tipe Sapi</td><td class="py-1 font-bold text-black">: SAPI {{ strtoupper(optional($logbook->cattleType)->name ?? '-') }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Jumlah</td><td class="py-1 font-bold text-black">: {{ $logbook->headcount }} Ekor</td></tr>
+                    @if(!empty($logbook->nama_kapal) && !empty($logbook->party))
+                    <tr>
+                        <td class="py-1 font-medium text-gray-600 text-blue-700">Akumulasi</td>
+                        <td class="py-1 font-extrabold text-blue-700">: 
+                            {{ $ongoingHeadcount }} / {{ strtoupper($logbook->party) }}{{ Str::contains(strtoupper($logbook->party), 'EKOR') ? '' : ' EKOR' }}
+                        </td>
+                    </tr>
+                    @endif
                 </table>
             </div>
             

@@ -87,7 +87,16 @@ class LogbookController extends Controller
     }
 
     public function print(Logbook $logbook) {
-        return view('dashboard.logbooks.print', compact('logbook'));
+        $ongoingHeadcount = 0;
+        if (!empty($logbook->nama_kapal)) {
+            $ongoingHeadcount = Logbook::where('nama_kapal', $logbook->nama_kapal)
+                ->where('id', '<=', $logbook->id)
+                ->sum('headcount');
+        } else {
+            $ongoingHeadcount = $logbook->headcount;
+        }
+
+        return view('dashboard.logbooks.print', compact('logbook', 'ongoingHeadcount'));
     }
 
     public function destroy(Logbook $logbook) {
