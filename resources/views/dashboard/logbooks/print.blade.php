@@ -84,8 +84,8 @@
                     <tr><td class="py-1 font-medium text-gray-600">Jumlah</td><td class="py-1 font-bold text-black">: {{ $logbook->headcount }} Ekor</td></tr>
                     @if($namaKapal !== '-' && $party)
                     <tr>
-                        <td class="py-1 font-medium text-blue-700">Akumulasi</td>
-                        <td class="py-1 font-extrabold text-blue-700">: {{ $ongoingHeadcount }} / {{ $party }} EKOR</td>
+                        <td class="py-1 font-medium text-gray-600">Akumulasi</td>
+                        <td class="py-1 font-bold text-black">: {{ $ongoingHeadcount }} / {{ $party }} EKOR</td>
                     </tr>
                     @endif
                 </table>
