@@ -234,12 +234,12 @@ class LogbookController extends Controller
         $defaultParty = $selectedManifest?->party ? $selectedManifest->party . ' EKOR' : ($firstLogbook->party ?? '');
         $defaultTipeSapi = optional($firstLogbook?->cattleType)->name ?? '';
 
-        // METADATA KAPAL DLL
-        $sheet->setCellValue('A6', 'NAMA KAPAL'); $sheet->setCellValue('B6', ':'); $sheet->setCellValue('C6', strtoupper($request->input('nama_kapal', $defaultNamaKapal)));
-        $sheet->setCellValue('A7', 'ETA');        $sheet->setCellValue('B7', ':'); $sheet->setCellValue('C7', strtoupper($request->input('eta', $defaultEta)));
-        $sheet->setCellValue('A8', 'KADE');       $sheet->setCellValue('B8', ':'); $sheet->setCellValue('C8', strtoupper($request->input('kade', $defaultKade)));
-        $sheet->setCellValue('A9', 'CONSIGNEE');  $sheet->setCellValue('B9', ':'); $sheet->setCellValue('C9', strtoupper($request->input('consignee', $defaultConsignee)));
-        $sheet->setCellValue('A10', 'PARTY');     $sheet->setCellValue('B10', ':'); $sheet->setCellValue('C10', strtoupper($request->input('party', $defaultParty)));
+        // METADATA KAPAL DLL (Digeser ke Kolom B agar tidak terpotong oleh lebar Kolom A yang sempit)
+        $sheet->setCellValue('B6', 'NAMA KAPAL'); $sheet->setCellValue('C6', ':'); $sheet->setCellValue('D6', strtoupper($request->input('nama_kapal', $defaultNamaKapal)));
+        $sheet->setCellValue('B7', 'ETA');        $sheet->setCellValue('C7', ':'); $sheet->setCellValue('D7', strtoupper($request->input('eta', $defaultEta)));
+        $sheet->setCellValue('B8', 'KADE');       $sheet->setCellValue('C8', ':'); $sheet->setCellValue('D8', strtoupper($request->input('kade', $defaultKade)));
+        $sheet->setCellValue('B9', 'CONSIGNEE');  $sheet->setCellValue('C9', ':'); $sheet->setCellValue('D9', strtoupper($request->input('consignee', $defaultConsignee)));
+        $sheet->setCellValue('B10', 'PARTY');     $sheet->setCellValue('C10', ':'); $sheet->setCellValue('D10', strtoupper($request->input('party', $defaultParty)));
         
         $sheet->mergeCells('I10:J10');
         $sheet->setCellValue('I10', strtoupper($request->input('tipe_sapi', $defaultTipeSapi)));
@@ -323,20 +323,9 @@ class LogbookController extends Controller
             $lokasiTtdText = $lokasiInput;
         }
         $sheet->setCellValue('A' . $sigRow, $lokasiTtdText);
-        
-        if (file_exists(public_path('logo.png'))) {
-            $drawing2 = new Drawing();
-            $drawing2->setName('Signature');
-            $drawing2->setPath(public_path('logo.png'));
-            $drawing2->setHeight(70);
-            $drawing2->setCoordinates('A' . ($sigRow + 1));
-            $drawing2->setOffsetX(20);
-            $drawing2->setOffsetY(5);
-            $drawing2->setWorksheet($sheet);
-        }
 
-        $sheet->setCellValue('A' . ($sigRow + 7), strtoupper($request->input('nama_ttd', 'LIAN')));
-        $sheet->getStyle('A' . ($sigRow + 7))->getFont()->setBold(true);
+        $sheet->setCellValue('A' . ($sigRow + 6), strtoupper($request->input('nama_ttd', 'LIAN')));
+        $sheet->getStyle('A' . ($sigRow + 6))->getFont()->setBold(true);
 
         // Save & Download
         $writer = new Xlsx($spreadsheet);
