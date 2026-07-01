@@ -100,6 +100,7 @@ class LogbookController extends Controller
     }
 
     public function print(Logbook $logbook) {
+        $logbook->load(['kapalManifest.kapal', 'kapalManifest.importir', 'route', 'cattleType', 'supplier']);
         $ongoingHeadcount = 0;
         $manifest = $logbook->kapalManifest;
 

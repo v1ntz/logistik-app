@@ -66,14 +66,23 @@
             </div>
 
             <!-- INFORMASI KAPAL -->
+            @php
+                $manifest = $logbook->kapalManifest;
+                $kapal    = $manifest?->kapal;
+                $namaKapal = $kapal?->nama_kapal ?? $logbook->nama_kapal ?? '-';
+                $eta       = $kapal?->eta        ?? $logbook->eta        ?? '-';
+                $kade      = $manifest?->kade    ?? $logbook->kade       ?? '-';
+                $party     = $manifest?->party   ?? $logbook->party      ?? null;
+                $consignee = $manifest?->consignee ?? $logbook->consignee ?? '-';
+                $importir  = $manifest?->importir  ?? $logbook->supplier  ?? null;
+            @endphp
             <div class="col-span-1">
                 <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">2. Kapal & Bongkar</h3>
                 <table class="w-full text-[11px] leading-relaxed">
-                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Supplier</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($logbook->exporter)->name ?? '-') }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">Nama Kapal</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->nama_kapal ?? '-') }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">ETA</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->eta ?? '-') }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">Kade</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->kade ?? '-') }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">Party</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->party ?? '-') }}</td></tr>
+                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Nama Kapal</td><td class="py-1 font-bold text-black">: {{ strtoupper($namaKapal) }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">ETA</td><td class="py-1 font-bold text-black">: {{ strtoupper($eta) }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Kade</td><td class="py-1 font-bold text-black">: {{ strtoupper($kade) }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Party</td><td class="py-1 font-bold text-black">: {{ $party ? $party.' EKOR' : '-' }}</td></tr>
                 </table>
             </div>
 
@@ -81,16 +90,14 @@
             <div class="col-span-1">
                 <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">3. Spesifikasi Kargo</h3>
                 <table class="w-full text-[11px] leading-relaxed">
-                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Consignee</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->consignee ?? '-') }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">Importir</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($logbook->supplier)->name ?? '-') }}</td></tr>
+                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Consignee</td><td class="py-1 font-bold text-black">: {{ strtoupper($consignee) }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Importir</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($importir)->name ?? '-') }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Tipe Sapi</td><td class="py-1 font-bold text-black">: SAPI {{ strtoupper(optional($logbook->cattleType)->name ?? '-') }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Jumlah</td><td class="py-1 font-bold text-black">: {{ $logbook->headcount }} Ekor</td></tr>
-                    @if(!empty($logbook->nama_kapal) && !empty($logbook->party))
+                    @if($namaKapal !== '-' && $party)
                     <tr>
-                        <td class="py-1 font-medium text-gray-600 text-blue-700">Akumulasi</td>
-                        <td class="py-1 font-extrabold text-blue-700">: 
-                            {{ $ongoingHeadcount }} / {{ strtoupper($logbook->party) }}{{ Str::contains(strtoupper($logbook->party), 'EKOR') ? '' : ' EKOR' }}
-                        </td>
+                        <td class="py-1 font-medium text-blue-700">Akumulasi</td>
+                        <td class="py-1 font-extrabold text-blue-700">: {{ $ongoingHeadcount }} / {{ $party }} EKOR</td>
                     </tr>
                     @endif
                 </table>
