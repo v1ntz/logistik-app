@@ -20,6 +20,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/inject-test-data', function() {
+        require base_path('storage/seed_30_logbooks.php');
+        return redirect()->route('logbooks.index')->with('success', '30 Data logbook berhasil disuntik untuk pengujian rekap.');
+    });
     Route::get('/logbooks/export', [LogbookController::class, 'export'])->name('logbooks.export');
     Route::get('/logbooks/rekap/pdf', [LogbookController::class, 'rekapPdf'])->name('logbooks.rekapPdf');
     Route::post('/logbooks/{id}/restore', [LogbookController::class, 'restore'])->name('logbooks.restore');
