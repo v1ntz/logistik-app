@@ -27,29 +27,38 @@
             </button>
         </div>
 
-        <!-- KOP SURAT (Centered dengan Logo di Kiri) -->
-        <div class="flex items-center border-b-[3px] border-black pb-5 mb-8">
-            @if(file_exists(public_path('logo.png')))
-                <img src="{{ asset('logo.png') }}" class="w-[80px] h-[80px] object-contain mr-5" alt="Logo PT PAD">
-            @else
-                <div class="w-[80px] h-[80px] rounded-full border-[3px] border-[#002060] flex items-center justify-center bg-white mr-5">
-                    <b class="text-xl text-[#002060] tracking-tighter">PAD</b>
+        <!-- KOP SURAT (SAMA PERSIS DENGAN SURAT JALAN) -->
+        <div class="flex items-start justify-between border-b-[3px] border-black pb-5 mb-8">
+            <div class="flex items-center space-x-5">
+                @if(file_exists(public_path('logo.png')))
+                    <img src="{{ asset('logo.png') }}" alt="Logo PAD" class="w-[85px] h-[85px] object-contain">
+                @else
+                    <div class="w-[85px] h-[85px] rounded-full border-[3px] border-[#002060] flex items-center justify-center bg-white">
+                        <b class="text-2xl text-[#002060] tracking-tighter">PAD</b>
+                    </div>
+                @endif
+                
+                <div class="text-left text-black">
+                    <h1 class="text-2xl md:text-[26px] font-bold text-[#002060] tracking-wide uppercase">PT. PRATAMA ANDAL DERMAGA</h1>
+                    <div class="text-[14px] leading-tight mt-1.5 text-gray-900">
+                        <p>Komp. Perkantoran Enggano Megah No. 9-I Lt. 2</p>
+                        <p>Jl. Raya Enggano, Tanjung Priok, Jakarta 14310</p>
+                        <p>pratamaandaldermaga@gmail.com - Telp. (021) 21697765</p>
+                    </div>
                 </div>
-            @endif
-            <div class="flex-1 text-center pr-[80px]">
-                <h1 class="text-2xl font-black text-[#002060] tracking-wide uppercase">PT. PRATAMA ANDAL DERMAGA</h1>
-                <div class="text-[12px] font-bold text-gray-900 leading-tight mt-1">
-                    <p>HEAD OPERATION : Komplek Perkantoran Enggano Megah No. 9-I Lt. 2</p>
-                    <p>Kel. Tanjung Priok Kec. Tanjung Priok Jakarta Utara</p>
-                    <p>TELP.(021) 21697765, FAX:(021) 21697765</p>
-                </div>
+            </div>
+            
+            <div class="text-right pt-2">
+                <h2 class="text-xl font-bold uppercase tracking-widest text-black border-2 border-black px-4 py-1.5 inline-block">Rekap Data</h2>
+                <div class="mt-3 text-sm text-black font-bold">Laporan Timbangan</div>
+                <div class="text-xs text-gray-700 font-semibold mt-1">Tgl Cetak: {{ date('d/m/Y') }}</div>
             </div>
         </div>
 
-        <!-- METADATA & BADGE TIPE SAPI (Kembali ke Tata Letak Pertama) -->
+        <!-- METADATA & BADGE TIPE SAPI (Hemat Tinta: Background Putih, Tanpa Warna Block) -->
         <div class="flex justify-between items-start mb-6">
-            <!-- Grid Informasi Kapal -->
-            <div class="grid grid-cols-2 gap-x-6 gap-y-2 bg-gray-50 border border-gray-200 rounded-lg p-4 flex-1 mr-6 text-xs">
+            <!-- Grid Informasi Kapal (White Background with Border, No Fills) -->
+            <div class="grid grid-cols-2 gap-x-6 gap-y-2 bg-white border border-gray-300 rounded-lg p-4 flex-1 mr-6 text-xs">
                 <div class="flex">
                     <span class="w-[100px] font-semibold text-gray-500 uppercase">Nama Kapal</span>
                     <span class="flex-1 font-bold text-black">: {{ strtoupper($namaKapal) }}</span>
@@ -72,17 +81,17 @@
                 </div>
             </div>
             
-            <!-- Badge Tipe Sapi -->
-            <div class="bg-gray-100 border border-gray-300 px-5 py-3.5 rounded-lg text-center font-black uppercase text-xs text-black tracking-wider self-center shadow-sm">
+            <!-- Badge Tipe Sapi (White Background with Border, No Fills) -->
+            <div class="bg-white border border-gray-400 px-5 py-3.5 rounded-lg text-center font-black uppercase text-xs text-black tracking-wider self-center shadow-sm">
                 {{ strtoupper($tipeSapi) }}
             </div>
         </div>
 
-        <!-- TABEL TIMBANGAN REKAP -->
+        <!-- TABEL TIMBANGAN REKAP (Hemat Tinta: Tanpa Background Gray pada Header/Total) -->
         <div class="mb-8">
             <table class="w-full text-[10px] text-left border-collapse border border-gray-300">
                 <thead>
-                    <tr class="bg-gray-100 border-b border-gray-300">
+                    <tr class="bg-white border-b-2 border-black">
                         <th class="border border-gray-300 p-2.5 text-center font-bold text-black w-[4%]">NO</th>
                         <th class="border border-gray-300 p-2.5 text-center font-bold text-black w-[13%]">NO. POLISI</th>
                         <th class="border border-gray-300 p-2.5 text-center font-bold text-black w-[20%]">NOMOR SURAT</th>
@@ -109,7 +118,7 @@
                             $totalNetto += $log->net_weight;
                             $totalEkor += $log->headcount;
                         @endphp
-                        <tr class="hover:bg-gray-50 border-b border-gray-200">
+                        <tr class="border-b border-gray-200 bg-white">
                             <td class="border border-gray-300 p-2 text-center">{{ $index + 1 }}</td>
                             <td class="border border-gray-300 p-2 text-center font-semibold text-black">{{ strtoupper($log->license_plate) }}</td>
                             <td class="border border-gray-300 p-2 text-center">SJ-{{ $log->created_at->format('ymd') }}-{{ str_pad($log->id, 4, '0', STR_PAD_LEFT) }}</td>
@@ -127,8 +136,8 @@
                         </tr>
                     @endforelse
                     
-                    <!-- BARIS TOTAL -->
-                    <tr class="bg-gray-100 border-t-2 border-black font-bold text-black text-[11px]">
+                    <!-- BARIS TOTAL (Hemat Tinta: Border Atas Tebal, Background Putih) -->
+                    <tr class="bg-white border-t-2 border-black font-bold text-black text-[11px]">
                         <td colspan="3" class="border border-gray-300 p-2.5 text-center font-black uppercase">TOTAL</td>
                         <td class="border border-gray-300 p-2.5 text-center font-black">{{ $totalEkor }}</td>
                         <td class="border border-gray-300 p-2.5 text-right font-mono">{{ number_format($totalBrotto, 0, ',', '.') }}</td>
@@ -142,7 +151,7 @@
             </table>
         </div>
 
-        <!-- TANDA TANGAN (Kembali ke versi pertama di sebelah kiri bawah) -->
+        <!-- TANDA TANGAN (Kiri bawah, hemat tinta) -->
         <div class="mt-12 flex justify-start text-xs font-bold text-black print:break-inside-avoid relative">
             <div class="w-[220px] relative">
                 <p class="mb-16">{{ $lokasiTtdText }},</p>
