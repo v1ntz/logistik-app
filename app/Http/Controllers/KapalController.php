@@ -46,7 +46,7 @@ class KapalController extends Controller
 
         $kapal->manifests()->create([
             'importir_id' => $request->importir_id,
-            'exporter_id' => $request->exporter_id,
+            'exporter_id' => $request->filled('exporter_id') ? $request->exporter_id : null,
             'kade'        => $request->kade,
             'consignee'   => $request->consignee,
             'party'       => $request->party,

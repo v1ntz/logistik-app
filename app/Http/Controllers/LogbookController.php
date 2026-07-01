@@ -58,7 +58,8 @@ class LogbookController extends Controller
             'pic_name' => 'required'
         ]);
 
-        $data = $request->only(['driver_name', 'license_plate', 'route_id', 'pic_name', 'kapal_manifest_id']);
+        $data = $request->only(['driver_name', 'license_plate', 'route_id', 'pic_name']);
+        $data['kapal_manifest_id'] = $request->filled('kapal_manifest_id') ? $request->kapal_manifest_id : null;
         $data['status'] = 'Muat';
 
         if ($request->filled('kapal_manifest_id')) {
@@ -107,7 +108,7 @@ class LogbookController extends Controller
         $updateData = [
             'supplier_id' => $request->supplier_id,
             'cattle_type_id' => $request->cattle_type_id,
-            'exporter_id' => $request->exporter_id,
+            'exporter_id' => $request->filled('exporter_id') ? $request->exporter_id : null,
             'headcount' => $request->headcount,
             'gross_weight' => $request->gross_weight,
             'tare_weight' => $request->tare_weight,
