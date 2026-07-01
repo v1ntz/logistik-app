@@ -38,9 +38,41 @@
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
+    @php
+        // 1. Foto Hero Background (public/hero.jpg dll)
+        $heroBg = 'https://images.unsplash.com/photo-1586528116311-ad8ed7c80a30?q=80&w=2070&auto=format&fit=crop';
+        foreach (['hero.jpg', 'hero.png', 'hero.webp', 'bg.jpg', 'bg.png'] as $img) {
+            if (file_exists(public_path($img))) { $heroBg = asset($img); break; }
+        }
+
+        // 2. Foto Utama Tentang PAD / Company Profile (public/profile.jpg dll)
+        $profileImg = 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=2070&auto=format&fit=crop';
+        foreach (['profile.jpg', 'profile.png', 'profile.webp', 'tentang.jpg', 'tentang.png', 'operasional.jpg', 'operasional.png', 'company.jpg', 'company.png', 'kantor.jpg', 'kantor.png'] as $img) {
+            if (file_exists(public_path($img))) { $profileImg = asset($img); break; }
+        }
+
+        // 3. Foto Layanan 1: Stevedoring (public/stevedoring.jpg dll)
+        $srv1Img = 'https://images.unsplash.com/photo-1549487424-698b67f37ccb?q=80&w=2070&auto=format&fit=crop';
+        foreach (['service1.jpg', 'service1.png', 'stevedoring.jpg', 'stevedoring.png', 'layanan1.jpg'] as $img) {
+            if (file_exists(public_path($img))) { $srv1Img = asset($img); break; }
+        }
+
+        // 4. Foto Layanan 2: Trucking (public/trucking.jpg dll)
+        $srv2Img = 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2070&auto=format&fit=crop';
+        foreach (['service2.jpg', 'service2.png', 'trucking.jpg', 'trucking.png', 'layanan2.jpg'] as $img) {
+            if (file_exists(public_path($img))) { $srv2Img = asset($img); break; }
+        }
+
+        // 5. Foto Layanan 3: Sistem Timbang (public/timbangan.jpg dll)
+        $srv3Img = 'https://images.unsplash.com/photo-1587293852726-59118eace1a0?q=80&w=2070&auto=format&fit=crop';
+        foreach (['service3.jpg', 'service3.png', 'timbangan.jpg', 'timbangan.png', 'layanan3.jpg'] as $img) {
+            if (file_exists(public_path($img))) { $srv3Img = asset($img); break; }
+        }
+    @endphp
+
     <style>
         .hero-bg {
-            background-image: linear-gradient(rgba(8, 47, 73, 0.8), rgba(8, 47, 73, 0.7)), url('https://images.unsplash.com/photo-1586528116311-ad8ed7c80a30?q=80&w=2070&auto=format&fit=crop');
+            background-image: linear-gradient(rgba(8, 47, 73, 0.8), rgba(8, 47, 73, 0.7)), url('{{ $heroBg }}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -147,7 +179,7 @@
                     <div class="lg:w-1/2" data-aos="fade-right" data-aos-duration="1200">
                         <div class="relative">
                             <div class="absolute inset-0 bg-brand-600 transform translate-x-4 translate-y-4 rounded-2xl"></div>
-                            <img src="https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=2070&auto=format&fit=crop" alt="Stevedoring sapi" class="relative rounded-2xl shadow-xl z-10 w-full h-auto object-cover border-4 border-white">
+                            <img src="{{ $profileImg }}" alt="Stevedoring sapi" class="relative rounded-2xl shadow-xl z-10 w-full h-auto object-cover border-4 border-white">
                             
                             <!-- Floating Badge -->
                             <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl z-20 animate-pulse border border-gray-100 flex items-center hidden md:flex">
@@ -203,7 +235,7 @@
                     <!-- Service 1 -->
                     <div data-aos="fade-up" data-aos-delay="0" class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 border border-gray-100 group flex flex-col">
                         <div class="h-56 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1549487424-698b67f37ccb?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                            <img src="{{ $srv1Img }}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                             <div class="absolute bottom-4 left-6">
                                 <span class="bg-brand-600 text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded">Unggulan</span>
@@ -218,7 +250,7 @@
                     <!-- Service 2 -->
                     <div data-aos="fade-up" data-aos-delay="150" class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 border border-gray-100 group flex flex-col">
                         <div class="h-56 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                            <img src="{{ $srv2Img }}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         </div>
                         <div class="p-8 flex-grow">
@@ -230,7 +262,7 @@
                     <!-- Service 3 -->
                     <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 border border-gray-100 group flex flex-col">
                         <div class="h-56 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1587293852726-59118eace1a0?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                            <img src="{{ $srv3Img }}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                         </div>
                         <div class="p-8 flex-grow">
