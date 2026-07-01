@@ -79,15 +79,25 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative mb-8">
+        <div class="grid grid-cols-1 gap-8 relative mb-8">
             <div class="space-y-3">
                 <label class="flex justify-between items-center text-gray-900 text-sm font-black tracking-wide uppercase">
                     <span>3. Headcount</span>
-                    <span class="text-xs font-semibold text-gray-500 normal-case bg-gray-100 px-2 py-0.5 rounded">(Fisik)</span>
+                    <span class="text-xs font-semibold text-gray-500 normal-case bg-gray-100 px-2 py-0.5 rounded">(Fisik Ekor)</span>
                 </label>
-                <div class="relative">
-                    <input type="number" name="headcount" required min="1" placeholder="0" value="{{ $logbook->headcount }}" class="shadow-inner appearance-none border-2 border-gray-300 rounded-xl w-full py-4 px-6 text-2xl font-black text-gray-800 focus:outline-none focus:ring-0 focus:border-purple-500 transition pr-16 text-right">
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-6 text-gray-400 font-bold">- SAPI</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    <div class="relative md:col-span-1">
+                        <input type="number" name="headcount" id="headcount" required min="1" placeholder="0" value="{{ $logbook->headcount }}" class="shadow-inner appearance-none border-2 border-gray-300 rounded-xl w-full py-4 px-6 text-2xl font-black text-gray-800 focus:outline-none focus:ring-0 focus:border-purple-500 transition pr-16 text-right">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-6 text-gray-400 font-bold">- SAPI</span>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Pilih Cepat Headcount (1 - 20):</label>
+                        <div class="grid grid-cols-5 sm:grid-cols-10 gap-1.5">
+                            @for ($i = 1; $i <= 20; $i++)
+                                <button type="button" onclick="setHeadcount({{ $i }})" class="bg-gray-50 hover:bg-purple-600 hover:text-white text-gray-800 text-xs font-black py-2.5 rounded-lg border border-gray-200 transition shadow-sm text-center focus:outline-none focus:ring-2 focus:ring-purple-500">{{ $i }}</button>
+                            @endfor
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,7 +109,8 @@
                     <span class="text-xs font-semibold text-gray-500 normal-case bg-gray-100 px-2 py-0.5 rounded">(Isi)</span>
                 </label>
                 <div class="relative">
-                    <input type="number" step="0.01" name="gross_weight" id="gross" required placeholder="0" value="{{ $logbook->gross_weight }}" class="shadow-inner appearance-none border-2 border-gray-300 rounded-xl w-full py-4 px-6 text-2xl font-black text-gray-800 focus:outline-none focus:ring-0 focus:border-purple-500 transition pr-16 text-right">
+                    <input type="number" step="0.01" name="gross_weight" id="gross" required placeholder="0" value="{{ $logbook->gross_weight }}" class="shadow-inner appearance-none border-2 border-gray-300 rounded-xl w-full py-4 px-6 text-2xl font-black text-gray-800 focus:outline-none focus:ring-0 focus:border-purple-500 transition pr-16 text-right" inputmode="numeric">
+                    <button type="button" onclick="clearInput('gross')" class="absolute inset-y-0 left-0 pl-5 flex items-center text-gray-400 hover:text-red-500 transition font-bold" title="Hapus Angka">✕</button>
                     <span class="absolute inset-y-0 right-0 flex items-center pr-6 text-gray-400 font-bold">KG</span>
                 </div>
             </div>
@@ -110,7 +121,8 @@
                     <span class="text-xs font-semibold text-gray-500 normal-case bg-gray-100 px-2 py-0.5 rounded">(Kosong)</span>
                 </label>
                 <div class="relative">
-                    <input type="number" step="0.01" name="tare_weight" id="tare" required placeholder="0" value="{{ $logbook->tare_weight }}" class="shadow-inner appearance-none border-2 border-gray-300 rounded-xl w-full py-4 px-6 text-2xl font-black text-gray-800 focus:outline-none focus:ring-0 focus:border-purple-500 transition pr-16 text-right">
+                    <input type="number" step="0.01" name="tare_weight" id="tare" required placeholder="0" value="{{ $logbook->tare_weight }}" class="shadow-inner appearance-none border-2 border-gray-300 rounded-xl w-full py-4 px-6 text-2xl font-black text-gray-800 focus:outline-none focus:ring-0 focus:border-purple-500 transition pr-16 text-right" inputmode="numeric">
+                    <button type="button" onclick="clearInput('tare')" class="absolute inset-y-0 left-0 pl-5 flex items-center text-gray-400 hover:text-red-500 transition font-bold" title="Hapus Angka">✕</button>
                     <span class="absolute inset-y-0 right-0 flex items-center pr-6 text-gray-400 font-bold">KG</span>
                 </div>
             </div>
@@ -166,10 +178,28 @@
 </div>
 
 <script>
+    const headcountInput = document.getElementById('headcount');
     const grossInput = document.getElementById('gross');
     const tareInput = document.getElementById('tare');
     const netDisplay = document.getElementById('net-display');
     const costInput = document.getElementById('additional_costs');
+
+    // Auto-focus ke input headcount saat halaman dimuat
+    window.addEventListener('DOMContentLoaded', () => {
+        headcountInput.focus();
+    });
+
+    function setHeadcount(val) {
+        headcountInput.value = val;
+        headcountInput.focus();
+    }
+
+    function clearInput(id) {
+        const input = document.getElementById(id);
+        input.value = '';
+        input.focus();
+        calculateNet();
+    }
 
     function calculateNet() {
         const gross = parseFloat(grossInput.value) || 0;
