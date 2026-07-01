@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
 class LogbookController extends Controller
 {
@@ -181,17 +182,24 @@ class LogbookController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
+        // Setup Cetak Halaman: Fit to Width (Portrait A4) agar kolom tidak terpotong ke halaman 2
+        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_PORTRAIT);
+        $sheet->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
+        $sheet->getPageSetup()->setFitToPage(true);
+        $sheet->getPageSetup()->setFitToWidth(1);
+        $sheet->getPageSetup()->setFitToHeight(0);
+
         // Kolom Lebar
         $sheet->getColumnDimension('A')->setWidth(5);
         $sheet->getColumnDimension('B')->setWidth(15);
         $sheet->getColumnDimension('C')->setWidth(20);
-        $sheet->getColumnDimension('D')->setWidth(15);
+        $sheet->getColumnDimension('D')->setWidth(10); // Persempit dari 15 ke 10 karena isi headcount
         $sheet->getColumnDimension('E')->setWidth(10);
         $sheet->getColumnDimension('F')->setWidth(10);
         $sheet->getColumnDimension('G')->setWidth(10);
         $sheet->getColumnDimension('H')->setWidth(12);
         $sheet->getColumnDimension('I')->setWidth(12);
-        $sheet->getColumnDimension('J')->setWidth(25);
+        $sheet->getColumnDimension('J')->setWidth(15); // Persempit dari 25 ke 15 agar muat satu halaman A4
 
         // KOP SURAT
         $sheet->mergeCells('C1:J1');
