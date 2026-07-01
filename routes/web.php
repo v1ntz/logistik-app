@@ -10,6 +10,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExporterController;
+use App\Http\Controllers\KapalController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
@@ -28,4 +29,9 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::resource('exporters', ExporterController::class)->except(['show']);
     Route::resource('users', UserController::class)->except(['show']);
     Route::get('/logbooks/{logbook}/print', [LogbookController::class, 'print'])->name('logbooks.print');
+    // Kapal
+    Route::resource('kapals', KapalController::class)->except(['show', 'edit', 'update', 'create']);
+    Route::post('/kapals/{kapal}/manifests', [KapalController::class, 'storeManifest'])->name('kapals.manifests.store');
+    Route::delete('/kapals/manifests/{manifest}', [KapalController::class, 'destroyManifest'])->name('kapals.manifests.destroy');
 });
+

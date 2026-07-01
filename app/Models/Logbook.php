@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Logbook extends Model
 {
     use SoftDeletes;
+
     protected $fillable = [
         'status', 'headcount', 'gross_weight', 'tare_weight', 'net_weight',
         'driver_name', 'license_plate', 'route_id', 'pic_name',
         'cattle_type_id', 'supplier_id', 'additional_costs', 'additional_costs_notes',
-        'nama_kapal', 'eta', 'kade', 'consignee', 'party', 'exporter_id'
+        'nama_kapal', 'eta', 'kade', 'consignee', 'party', 'exporter_id',
+        'kapal_manifest_id',
     ];
 
     public function route()
@@ -33,5 +35,10 @@ class Logbook extends Model
     public function exporter()
     {
         return $this->belongsTo(Exporter::class);
+    }
+
+    public function kapalManifest()
+    {
+        return $this->belongsTo(KapalManifest::class);
     }
 }

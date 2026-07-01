@@ -44,38 +44,70 @@
             @endif
         </div>
 
-        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">III. Detail Pengapalan & Bongkar (Opsional)</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">Supplier (Luar Negeri)</label>
-                <select name="exporter_id" class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white transition cursor-pointer">
-                    <option value="">-- Pilih Supplier Luar Negeri --</option>
-                    @foreach($exporters as $exporter)
-                        <option value="{{ $exporter->id }}">{{ strtoupper($exporter->name) }} ({{ $exporter->location ?? '-' }})</option>
-                    @endforeach
-                </select>
+        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">III. Manifest Kapal (Opsional)</h3>
+        <div class="mb-8 p-6 bg-blue-50 rounded-xl border border-blue-200">
+            <label class="block text-blue-900 text-sm font-bold mb-2">Pilih Manifest Kapal</label>
+            <select name="kapal_manifest_id" id="kapal_manifest_select"
+                class="shadow border-transparent rounded-lg w-full py-3.5 px-4 text-gray-800 font-semibold leading-tight focus:outline-none focus:ring-4 focus:ring-blue-300 bg-white transition cursor-pointer">
+                <option value="">-- Pilih Kapal & Importir (Opsional) --</option>
+                @foreach($kapals as $kapal)
+                    <optgroup label="🚢 {{ strtoupper($kapal->nama_kapal) }}{{ $kapal->eta ? ' (ETA: '.$kapal->eta.')' : '' }}">
+                        @foreach($kapal->manifests as $manifest)
+                        <option value="{{ $manifest->id }}"
+                            data-kapal="{{ $kapal->nama_kapal }}"
+                            data-eta="{{ $kapal->eta }}"
+                            data-kade="{{ $manifest->kade }}"
+                            data-consignee="{{ $manifest->consignee }}"
+                            data-party="{{ $manifest->party }}">
+                            {{ strtoupper(optional($manifest->importir)->name) }} — Consignee: {{ $manifest->consignee ?? '-' }} | Kade: {{ $manifest->kade ?? '-' }} | {{ $manifest->party ?? '?' }} Ekor
+                        </option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            </select>
+            @if($kapals->isEmpty())
+            <div class="mt-3 bg-yellow-50 border border-yellow-300 text-yellow-800 px-4 py-3 rounded">
+                Belum ada data kapal. <a href="{{ route('kapals.index') }}" class="underline font-bold">Buat kapal terlebih dahulu</a>.
             </div>
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">Nama Kapal</label>
-                <input type="text" name="nama_kapal" placeholder="Contoh: MV. BALHA ONE" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">ETA</label>
-                <input type="text" name="eta" placeholder="Contoh: 22-Mar-26" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">Kade</label>
-                <input type="text" name="kade" placeholder="Contoh: 114" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-            </div>
-            <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">Consignee</label>
-                <input type="text" name="consignee" placeholder="Contoh: PT. CINTA ASIH FARM" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-            </div>
-            <div class="md:col-span-2">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Party</label>
-                <input type="text" name="party" placeholder="Contoh: 60 EKOR" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            @endif
+
+            <!-- Info Preview Manifest -->
+            <div id="manifest-preview" class="hidden mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="bg-white rounded-lg border border-blue-200 px-3 py-2">
+                    <p class="text-xs text-gray-500 font-bold uppercase">Kapal</p>
+                    <p id="prev-kapal" class="font-bold text-gray-800 text-sm uppercase">-</p>
+                </div>
+                <div class="bg-white rounded-lg border border-blue-200 px-3 py-2">
+                    <p class="text-xs text-gray-500 font-bold uppercase">ETA</p>
+                    <p id="prev-eta" class="font-bold text-gray-800 text-sm">-</p>
+                </div>
+                <div class="bg-white rounded-lg border border-blue-200 px-3 py-2">
+                    <p class="text-xs text-gray-500 font-bold uppercase">Kade</p>
+                    <p id="prev-kade" class="font-bold text-gray-800 text-sm">-</p>
+                </div>
+                <div class="bg-white rounded-lg border border-blue-200 px-3 py-2">
+                    <p class="text-xs text-gray-500 font-bold uppercase">Party</p>
+                    <p id="prev-party" class="font-bold text-gray-800 text-sm">-</p>
+                </div>
             </div>
         </div>
+
+<script>
+    const manifestSelect = document.getElementById('kapal_manifest_select');
+    const preview = document.getElementById('manifest-preview');
+    manifestSelect.addEventListener('change', function() {
+        const opt = this.options[this.selectedIndex];
+        if (this.value) {
+            document.getElementById('prev-kapal').textContent = opt.dataset.kapal || '-';
+            document.getElementById('prev-eta').textContent = opt.dataset.eta || '-';
+            document.getElementById('prev-kade').textContent = opt.dataset.kade || '-';
+            document.getElementById('prev-party').textContent = (opt.dataset.party || '?') + ' Ekor';
+            preview.classList.remove('hidden');
+        } else {
+            preview.classList.add('hidden');
+        }
+    });
+</script>
 
         <div class="flex items-center justify-end space-x-4 pt-6 mt-4 border-t border-gray-100">
             <a href="{{ route('logbooks.index') }}" class="inline-block align-baseline font-bold text-gray-500 hover:text-gray-800 transition">

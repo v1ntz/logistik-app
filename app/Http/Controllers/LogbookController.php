@@ -42,13 +42,15 @@ class LogbookController extends Controller
 
     public function create() {
         $routes = Route::all();
-        $exporters = \App\Models\Exporter::all();
-        return view('dashboard.logbooks.create', compact('routes', 'exporters'));
+        $kapals = \App\Models\Kapal::with(['manifests.importir'])->latest()->get();
+        return view('dashboard.logbooks.create', compact('routes', 'kapals'));
     }
 
     public function store(Request $request) {
         $request->validate(['driver_name' => 'required', 'license_plate' => 'required', 'route_id' => 'required', 'pic_name' => 'required']);
-        Logbook::create(array_merge($request->all(), ['status' => 'Muat']));
+        Logbook::create(array_merge($request->only([
+            'driver_name', 'license_plate', 'route_id', 'pic_name', 'kapal_manifest_id'
+        ]), ['status' => 'Muat']));
         return redirect()->route('logbooks.index')->with('success', 'Catatan muat ditambahkan.');
     }
 
@@ -99,7 +101,15 @@ class LogbookController extends Controller
 
     public function print(Logbook $logbook) {
         $ongoingHeadcount = 0;
-        if (!empty($logbook->nama_kapal)) {
+        $manifest = $logbook->kapalManifest;
+
+        if ($manifest) {
+            // Hitung dari semua logbook yang pakai manifest yang sama
+            $ongoingHeadcount = Logbook::where('kapal_manifest_id', $manifest->id)
+                ->where('id', '<=', $logbook->id)
+                ->sum('headcount');
+        } elseif (!empty($logbook->nama_kapal)) {
+            // Fallback ke cara lama (nama_kapal)
             $ongoingHeadcount = Logbook::where('nama_kapal', $logbook->nama_kapal)
                 ->where('id', '<=', $logbook->id)
                 ->sum('headcount');
