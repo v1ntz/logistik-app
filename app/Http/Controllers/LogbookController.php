@@ -130,7 +130,7 @@ class LogbookController extends Controller
     }
 
     public function print(Logbook $logbook) {
-        $logbook->load(['kapalManifest.kapal', 'kapalManifest.importir', 'route', 'cattleType', 'supplier']);
+        $logbook->load(['kapalManifest.kapal', 'kapalManifest.importir', 'kapalManifest.exporter', 'route', 'cattleType', 'supplier', 'exporter']);
         $ongoingHeadcount = 0;
         $manifest = $logbook->kapalManifest;
 
@@ -163,7 +163,7 @@ class LogbookController extends Controller
     }
 
     public function export(Request $request) {
-        $query = Logbook::with(['route', 'cattleType', 'supplier', 'kapalManifest.kapal', 'kapalManifest.importir'])->latest();
+        $query = Logbook::with(['route', 'cattleType', 'supplier', 'kapalManifest.kapal', 'kapalManifest.importir', 'kapalManifest.exporter'])->latest();
 
         if ($request->filled('kapal_manifest_id')) {
             $query->where('kapal_manifest_id', $request->kapal_manifest_id);
@@ -243,14 +243,14 @@ class LogbookController extends Controller
         $defaultTipeSapi = optional($firstLogbook?->cattleType)->name ?? '';
 
         // METADATA KAPAL DLL (Digeser ke Kolom B agar tidak terpotong oleh lebar Kolom A yang sempit)
-        $sheet->setCellValue('B6', 'NAMA KAPAL'); $sheet->setCellValue('C6', ':'); $sheet->setCellValue('D6', strtoupper($request->input('nama_kapal', $defaultNamaKapal)));
-        $sheet->setCellValue('B7', 'ETA');        $sheet->setCellValue('C7', ':'); $sheet->setCellValue('D7', strtoupper($request->input('eta', $defaultEta)));
-        $sheet->setCellValue('B8', 'KADE');       $sheet->setCellValue('C8', ':'); $sheet->setCellValue('D8', strtoupper($request->input('kade', $defaultKade)));
-        $sheet->setCellValue('B9', 'CONSIGNEE');  $sheet->setCellValue('C9', ':'); $sheet->setCellValue('D9', strtoupper($request->input('consignee', $defaultConsignee)));
-        $sheet->setCellValue('B10', 'PARTY');     $sheet->setCellValue('C10', ':'); $sheet->setCellValue('D10', strtoupper($request->input('party', $defaultParty)));
+        $sheet->setCellValue('B6', 'NAMA KAPAL'); $sheet->setCellValue('C6', ':'); $sheet->setCellValue('D6', strtoupper($request->filled('nama_kapal') ? $request->nama_kapal : $defaultNamaKapal));
+        $sheet->setCellValue('B7', 'ETA');        $sheet->setCellValue('C7', ':'); $sheet->setCellValue('D7', strtoupper($request->filled('eta') ? $request->eta : $defaultEta));
+        $sheet->setCellValue('B8', 'KADE');       $sheet->setCellValue('C8', ':'); $sheet->setCellValue('D8', strtoupper($request->filled('kade') ? $request->kade : $defaultKade));
+        $sheet->setCellValue('B9', 'CONSIGNEE');  $sheet->setCellValue('C9', ':'); $sheet->setCellValue('D9', strtoupper($request->filled('consignee') ? $request->consignee : $defaultConsignee));
+        $sheet->setCellValue('B10', 'PARTY');     $sheet->setCellValue('C10', ':'); $sheet->setCellValue('D10', strtoupper($request->filled('party') ? $request->party : $defaultParty));
         
         $sheet->mergeCells('I10:J10');
-        $sheet->setCellValue('I10', strtoupper($request->input('tipe_sapi', $defaultTipeSapi)));
+        $sheet->setCellValue('I10', strtoupper($request->filled('tipe_sapi') ? $request->tipe_sapi : $defaultTipeSapi));
         $sheet->getStyle('I10:J10')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
         $sheet->getStyle('I10:J10')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
