@@ -170,6 +170,10 @@ class LogbookController extends Controller
             $query->where('kapal_manifest_id', $request->kapal_manifest_id);
         }
 
+        if ($request->filled('cattle_type_id')) {
+            $query->where('cattle_type_id', $request->cattle_type_id);
+        }
+
         if ($request->filled('start_date') && $request->filled('end_date') && !$request->filled('kapal_manifest_id')) {
             $query->whereBetween('created_at', [
                 $request->start_date . ' 00:00:00',
@@ -248,7 +252,12 @@ class LogbookController extends Controller
         $defaultKade = $selectedManifest?->kade ?? $firstLogbook->kade ?? '';
         $defaultConsignee = $selectedManifest?->consignee ?? $firstLogbook->consignee ?? '';
         $defaultParty = $selectedManifest?->party ? $selectedManifest->party . ' EKOR' : ($firstLogbook->party ?? '');
-        $defaultTipeSapi = optional($firstLogbook?->cattleType)->name ?? '';
+        if ($request->filled('cattle_type_id')) {
+            $selectedCattleType = \App\Models\CattleType::find($request->cattle_type_id);
+            $defaultTipeSapi = $selectedCattleType?->name ?? '';
+        } else {
+            $defaultTipeSapi = optional($firstLogbook?->cattleType)->name ?? '';
+        }
 
         // METADATA KAPAL DLL (Digeser ke Kolom B agar tidak terpotong oleh lebar Kolom A yang sempit)
         $sheet->setCellValue('B6', 'NAMA KAPAL'); $sheet->setCellValue('C6', ':'); $sheet->setCellValue('D6', strtoupper($request->filled('nama_kapal') ? $request->nama_kapal : $defaultNamaKapal));
@@ -372,6 +381,10 @@ class LogbookController extends Controller
             $query->where('kapal_manifest_id', $request->kapal_manifest_id);
         }
 
+        if ($request->filled('cattle_type_id')) {
+            $query->where('cattle_type_id', $request->cattle_type_id);
+        }
+
         if ($request->filled('start_date') && $request->filled('end_date') && !$request->filled('kapal_manifest_id')) {
             $query->whereBetween('created_at', [
                 $request->start_date . ' 00:00:00',
@@ -394,7 +407,13 @@ class LogbookController extends Controller
         $kade = $request->filled('kade') ? $request->kade : ($selectedManifest?->kade ?? $firstLogbook->kade ?? '-');
         $consignee = $request->filled('consignee') ? $request->consignee : ($selectedManifest?->consignee ?? $firstLogbook->consignee ?? '-');
         $party = $request->filled('party') ? $request->party : ($selectedManifest?->party ? $selectedManifest->party . ' EKOR' : ($firstLogbook->party ?? '-'));
-        $tipeSapi = $request->filled('tipe_sapi') ? $request->tipe_sapi : (optional($firstLogbook?->cattleType)->name ?? '-');
+        
+        if ($request->filled('cattle_type_id')) {
+            $selectedCattleType = \App\Models\CattleType::find($request->cattle_type_id);
+            $tipeSapi = $selectedCattleType?->name ?? '-';
+        } else {
+            $tipeSapi = $request->filled('tipe_sapi') ? $request->tipe_sapi : (optional($firstLogbook?->cattleType)->name ?? '-');
+        }
 
         $lokasiInput = $request->input('lokasi_ttd');
         $lokasiTtdText = empty($lokasiInput) ? ('Tanjung Priok, ' . date('d F Y')) : $lokasiInput;

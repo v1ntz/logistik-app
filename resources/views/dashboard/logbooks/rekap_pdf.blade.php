@@ -63,12 +63,12 @@
                     <span class="flex-1 font-bold text-black">: {{ strtoupper($kade) }}</span>
                 </div>
                 <div class="flex">
-                    <span class="w-[100px] font-semibold text-gray-500 uppercase">Consignee</span>
-                    <span class="flex-1 font-bold text-black">: {{ strtoupper($consignee) }}</span>
-                </div>
-                <div class="flex col-span-2">
                     <span class="w-[100px] font-semibold text-gray-500 uppercase">Party</span>
                     <span class="flex-1 font-bold text-black">: {{ strtoupper($party) }}</span>
+                </div>
+                <div class="flex col-span-2 border-t border-gray-200 pt-2">
+                    <span class="w-[100px] font-semibold text-gray-500 uppercase">Consignee</span>
+                    <span class="flex-1 font-bold text-black">: {{ strtoupper($consignee) }}</span>
                 </div>
             </div>
             
@@ -145,7 +145,7 @@
         <!-- TANDA TANGAN (Kembali ke versi pertama di sebelah kiri bawah) -->
         <div class="mt-12 flex justify-start text-xs font-bold text-black print:break-inside-avoid relative">
             <div class="w-[220px] relative">
-                <p class="mb-16">{{ $lokasiTtdText }}<br>Admin Operasional,</p>
+                <p class="mb-16">{{ $lokasiTtdText }},</p>
                 
                 <!-- Stempel Logo PAD Basah Transparan -->
                 @if(file_exists(public_path('logo.png')))
