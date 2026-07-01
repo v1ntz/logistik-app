@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Master Data Eksportir (Australia)')
+@section('title', 'Master Data Eksportir')
 @section('content')
 <div class="mb-6 flex justify-between items-center">
     <div>
-        <h1 class="text-2xl font-bold text-gray-900">Master Data Eksportir (Australia)</h1>
+        <h1 class="text-2xl font-bold text-gray-900">Master Data Eksportir</h1>
         <p class="text-gray-600 text-sm mt-1">Kelola daftar pihak eksportir asing asal muat sapi.</p>
     </div>
 </div>

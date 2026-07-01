@@ -72,7 +72,7 @@
                 </a>
                 <a href="{{ route('exporters.index') }}" class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('exporters.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white' }}">
                     <svg class="w-5 h-5 mr-3 {{ request()->routeIs('exporters.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5A2.5 2.5 0 0119 14.5v.74m-.74 2.292A9 9 0 1118 7.74"></path></svg>
-                    Eksportir (Australia)
+                    Eksportir
                 </a>
                 <a href="{{ route('kapals.index') }}" class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('kapals.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white' }}">
                     <svg class="w-5 h-5 mr-3 {{ request()->routeIs('kapals.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13l1.5-4.5M3 13h18M3 13l-1 5h20l-1-5M21 13l-1.5-4.5M6 8V5a1 1 0 011-1h10a1 1 0 011 1v3"></path></svg>

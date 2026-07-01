@@ -117,9 +117,9 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Eksportir (Australia)</label>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Eksportir</label>
                                 <select name="exporter_id" class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 bg-white">
-                                    <option value="">-- Pilih Eksportir Australia (Opsional) --</option>
+                                    <option value="">-- Pilih Eksportir (Opsional) --</option>
                                     @foreach($exporters as $exp)
                                     <option value="{{ $exp->id }}">{{ strtoupper($exp->name) }}</option>
                                     @endforeach
