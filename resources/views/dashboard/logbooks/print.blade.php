@@ -81,7 +81,7 @@
                 <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">2. Spesifikasi Kargo</h3>
                 <table class="w-full text-[11px] leading-relaxed">
                     <tr><td class="py-1 w-1/3 font-medium text-gray-600">Consignee</td><td class="py-1 font-bold text-black">: {{ strtoupper($consignee) }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">Tipe Sapi</td><td class="py-1 font-bold text-black">: SAPI {{ strtoupper(optional($logbook->cattleType)->name ?? '-') }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Tipe Sapi</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($logbook->cattleType)->name ?? '-') }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Jumlah</td><td class="py-1 font-bold text-black">: {{ $logbook->headcount }} Ekor</td></tr>
                     @if($namaKapal !== '-' && $party)
                     <tr>

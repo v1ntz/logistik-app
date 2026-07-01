@@ -164,7 +164,7 @@ class LogbookController extends Controller
     }
 
     public function export(Request $request) {
-        $query = Logbook::with(['route', 'cattleType', 'supplier', 'kapalManifest.kapal', 'kapalManifest.importir', 'kapalManifest.exporter'])->latest();
+        $query = Logbook::with(['route', 'cattleType', 'supplier', 'kapalManifest.kapal', 'kapalManifest.importir', 'kapalManifest.exporter'])->oldest();
 
         if ($request->filled('kapal_manifest_id')) {
             $query->where('kapal_manifest_id', $request->kapal_manifest_id);
@@ -375,7 +375,7 @@ class LogbookController extends Controller
     }
 
     public function rekapPdf(Request $request) {
-        $query = Logbook::with(['route', 'cattleType', 'supplier', 'kapalManifest.kapal', 'kapalManifest.importir'])->latest();
+        $query = Logbook::with(['route', 'cattleType', 'supplier', 'kapalManifest.kapal', 'kapalManifest.importir'])->oldest();
 
         if ($request->filled('kapal_manifest_id')) {
             $query->where('kapal_manifest_id', $request->kapal_manifest_id);
