@@ -51,10 +51,28 @@ class LogbookController extends Controller
     }
 
     public function store(Request $request) {
-        $request->validate(['driver_name' => 'required', 'license_plate' => 'required', 'route_id' => 'required', 'pic_name' => 'required']);
-        Logbook::create(array_merge($request->only([
-            'driver_name', 'license_plate', 'route_id', 'pic_name', 'kapal_manifest_id'
-        ]), ['status' => 'Muat']));
+        $request->validate([
+            'driver_name' => 'required',
+            'license_plate' => 'required',
+            'route_id' => 'required',
+            'pic_name' => 'required'
+        ]);
+
+        $data = $request->only(['driver_name', 'license_plate', 'route_id', 'pic_name', 'kapal_manifest_id']);
+        $data['status'] = 'Muat';
+
+        if ($request->filled('kapal_manifest_id')) {
+            $manifest = \App\Models\KapalManifest::find($request->kapal_manifest_id);
+            if ($manifest) {
+                $data['supplier_id'] = $manifest->importir_id; // Importir lokal dipetakan ke supplier_id
+                $data['exporter_id'] = $manifest->exporter_id; // Eksportir asing dipetakan ke exporter_id
+                $data['consignee']   = $manifest->consignee;
+                $data['kade']        = $manifest->kade;
+                $data['party']       = $manifest->party;
+            }
+        }
+
+        Logbook::create($data);
         return redirect()->route('logbooks.index')->with('success', 'Catatan muat ditambahkan.');
     }
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class KapalManifest extends Model
 {
-    protected $fillable = ['kapal_id', 'importir_id', 'kade', 'consignee', 'party'];
+    protected $fillable = ['kapal_id', 'importir_id', 'exporter_id', 'kade', 'consignee', 'party'];
 
     public function kapal()
     {
@@ -15,7 +15,12 @@ class KapalManifest extends Model
 
     public function importir()
     {
-        return $this->belongsTo(Exporter::class, 'importir_id');
+        return $this->belongsTo(Supplier::class, 'importir_id');
+    }
+
+    public function exporter()
+    {
+        return $this->belongsTo(Exporter::class);
     }
 
     public function logbooks()

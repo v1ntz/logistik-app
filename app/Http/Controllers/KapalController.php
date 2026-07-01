@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Kapal;
 use App\Models\KapalManifest;
-use App\Models\Exporter;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class KapalController extends Controller
 {
     public function index()
     {
-        $kapals = Kapal::with(['manifests.importir'])->latest()->get();
-        $importirs = Exporter::orderBy('name')->get();
-        return view('dashboard.kapals.index', compact('kapals', 'importirs'));
+        $kapals = Kapal::with(['manifests.importir', 'manifests.exporter'])->latest()->get();
+        $importirs = Supplier::orderBy('name')->get();
+        $exporters = \App\Models\Exporter::orderBy('name')->get();
+        return view('dashboard.kapals.index', compact('kapals', 'importirs', 'exporters'));
     }
 
     public function store(Request $request)
@@ -36,7 +37,8 @@ class KapalController extends Controller
     public function storeManifest(Request $request, Kapal $kapal)
     {
         $request->validate([
-            'importir_id' => 'required|exists:exporters,id',
+            'importir_id' => 'required|exists:suppliers,id',
+            'exporter_id' => 'nullable|exists:exporters,id',
             'kade'        => 'nullable|string',
             'consignee'   => 'nullable|string',
             'party'       => 'nullable|integer|min:1',
@@ -44,6 +46,7 @@ class KapalController extends Controller
 
         $kapal->manifests()->create([
             'importir_id' => $request->importir_id,
+            'exporter_id' => $request->exporter_id,
             'kade'        => $request->kade,
             'consignee'   => $request->consignee,
             'party'       => $request->party,

@@ -71,6 +71,7 @@
                     <tr><td class="py-1 font-medium text-gray-600">ETA</td><td class="py-1 font-bold text-black">: {{ strtoupper($eta) }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Kade</td><td class="py-1 font-bold text-black">: {{ strtoupper($kade) }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Party</td><td class="py-1 font-bold text-black">: {{ $party ? $party.' EKOR' : '-' }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Eksportir</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($logbook->exporter)->name ?? '-') }}</td></tr>
                 </table>
             </div>
 

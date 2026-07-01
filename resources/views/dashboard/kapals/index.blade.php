@@ -69,7 +69,10 @@
                     <div class="flex items-center justify-between bg-indigo-50 border border-indigo-100 rounded-lg px-4 py-3">
                         <div class="flex-1">
                             <div class="flex items-center gap-3 flex-wrap">
-                                <span class="font-black text-indigo-800 text-sm uppercase">{{ optional($manifest->importir)->name ?? '-' }}</span>
+                                <span class="font-black text-indigo-800 text-sm uppercase">Importir: {{ optional($manifest->importir)->name ?? '-' }}</span>
+                                @if($manifest->exporter)
+                                <span class="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded">🚢 Eksportir: {{ optional($manifest->exporter)->name }}</span>
+                                @endif
                                 @if($manifest->consignee)
                                 <span class="text-xs text-gray-600 bg-white border border-gray-200 px-2 py-0.5 rounded">📋 {{ $manifest->consignee }}</span>
                                 @endif
@@ -98,18 +101,27 @@
                 <!-- Form Tambah Manifest -->
                 <details class="group">
                     <summary class="cursor-pointer text-sm font-bold text-blue-600 hover:text-blue-800 list-none flex items-center gap-1">
-                        <span class="group-open:hidden">+ Tambah Importir ke Kapal Ini</span>
+                        <span class="group-open:hidden">+ Tambah Manifest Importir ke Kapal Ini</span>
                         <span class="hidden group-open:inline">▲ Tutup Form</span>
                     </summary>
                     <form action="{{ route('kapals.manifests.store', $kapal) }}" method="POST" class="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Importir <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Importir (Indonesia) <span class="text-red-500">*</span></label>
                                 <select name="importir_id" required class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 bg-white">
-                                    <option value="">-- Pilih Importir --</option>
+                                    <option value="">-- Pilih Importir Indonesia --</option>
                                     @foreach($importirs as $imp)
                                     <option value="{{ $imp->id }}">{{ strtoupper($imp->name) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Eksportir (Australia)</label>
+                                <select name="exporter_id" class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 bg-white">
+                                    <option value="">-- Pilih Eksportir Australia (Opsional) --</option>
+                                    @foreach($exporters as $exp)
+                                    <option value="{{ $exp->id }}">{{ strtoupper($exp->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -123,7 +135,7 @@
                                 <input type="text" name="kade" placeholder="Contoh: 114"
                                     class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500">
                             </div>
-                            <div>
+                            <div class="md:col-span-2">
                                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Party (Total Ekor)</label>
                                 <input type="number" name="party" min="1" placeholder="Contoh: 60"
                                     class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500">
