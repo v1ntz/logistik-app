@@ -23,7 +23,7 @@
                 <input type="text" name="license_plate" required placeholder="Contoh: N 8820 P" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 font-bold uppercase leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
             </div>
             <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2">Nama Penanggung Jawab (PIC)</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2">PIC Kendaraan <span class="text-red-500">*</span></label>
                 <input type="text" name="pic_name" required placeholder="Contoh: Pak Agus" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
             </div>
         </div>

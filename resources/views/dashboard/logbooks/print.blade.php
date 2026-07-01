@@ -97,7 +97,7 @@
                 <table class="w-full text-[11px] leading-relaxed">
                     <tr><td class="py-1 w-1/3 font-medium text-gray-600">Driver</td><td class="py-1 font-bold text-black">: {{ $logbook->driver_name }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">No. Polisi</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->license_plate) }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">PIC Jaga</td><td class="py-1 font-bold text-black">: {{ $logbook->pic_name }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">PIC Kendaraan</td><td class="py-1 font-bold text-black">: {{ $logbook->pic_name }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Rute Asal</td><td class="py-1 font-bold text-black">: {{ optional($logbook->route)->origin ?? '-' }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Tujuan</td><td class="py-1 font-bold text-black">: {{ optional($logbook->route)->destination ?? '-' }}</td></tr>
                 </table>

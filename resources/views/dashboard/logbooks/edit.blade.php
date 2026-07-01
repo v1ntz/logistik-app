@@ -23,7 +23,7 @@
                 </p>
             </div>
             <div>
-                <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">PIC / Penanggung Jawab</p>
+                <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">PIC Kendaraan</p>
                 <p class="font-bold text-gray-800">{{ $logbook->pic_name }}</p>
             </div>
             @if($logbook->nama_kapal)
