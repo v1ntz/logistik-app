@@ -52,20 +52,8 @@
 
         <!-- BODY SURAT -->
         <div class="grid grid-cols-3 gap-x-6 gap-y-6 mb-8 border-b border-gray-300 pb-6">
-            
-            <!-- INFORMASI PENGIRIMAN -->
-            <div class="col-span-1">
-                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">1. Kendaraan & Rute</h3>
-                <table class="w-full text-[11px] leading-relaxed">
-                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Driver</td><td class="py-1 font-bold text-black">: {{ $logbook->driver_name }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">No. Polisi</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->license_plate) }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">PIC Jaga</td><td class="py-1 font-bold text-black">: {{ $logbook->pic_name }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">Rute Asal</td><td class="py-1 font-bold text-black">: {{ optional($logbook->route)->origin ?? '-' }}</td></tr>
-                    <tr><td class="py-1 font-medium text-gray-600">Tujuan</td><td class="py-1 font-bold text-black">: {{ optional($logbook->route)->destination ?? '-' }}</td></tr>
-                </table>
-            </div>
 
-            <!-- INFORMASI KAPAL -->
+            <!-- 1. INFORMASI KAPAL -->
             @php
                 $manifest = $logbook->kapalManifest;
                 $kapal    = $manifest?->kapal;
@@ -77,7 +65,7 @@
                 $importir  = $manifest?->importir  ?? $logbook->supplier  ?? null;
             @endphp
             <div class="col-span-1">
-                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">2. Kapal & Bongkar</h3>
+                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">1. Kapal & Bongkar</h3>
                 <table class="w-full text-[11px] leading-relaxed">
                     <tr><td class="py-1 w-1/3 font-medium text-gray-600">Nama Kapal</td><td class="py-1 font-bold text-black">: {{ strtoupper($namaKapal) }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">ETA</td><td class="py-1 font-bold text-black">: {{ strtoupper($eta) }}</td></tr>
@@ -86,9 +74,9 @@
                 </table>
             </div>
 
-            <!-- INFORMASI MUATAN -->
+            <!-- 2. INFORMASI MUATAN -->
             <div class="col-span-1">
-                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">3. Spesifikasi Kargo</h3>
+                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">2. Spesifikasi Kargo</h3>
                 <table class="w-full text-[11px] leading-relaxed">
                     <tr><td class="py-1 w-1/3 font-medium text-gray-600">Consignee</td><td class="py-1 font-bold text-black">: {{ strtoupper($consignee) }}</td></tr>
                     <tr><td class="py-1 font-medium text-gray-600">Importir</td><td class="py-1 font-bold text-black">: {{ strtoupper(optional($importir)->name ?? '-') }}</td></tr>
@@ -100,6 +88,18 @@
                         <td class="py-1 font-extrabold text-blue-700">: {{ $ongoingHeadcount }} / {{ $party }} EKOR</td>
                     </tr>
                     @endif
+                </table>
+            </div>
+
+            <!-- 3. KENDARAAN & RUTE -->
+            <div class="col-span-1">
+                <h3 class="font-black text-black uppercase border-b-2 border-black pb-1 mb-2.5 text-xs tracking-wider">3. Kendaraan & Rute</h3>
+                <table class="w-full text-[11px] leading-relaxed">
+                    <tr><td class="py-1 w-1/3 font-medium text-gray-600">Driver</td><td class="py-1 font-bold text-black">: {{ $logbook->driver_name }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">No. Polisi</td><td class="py-1 font-bold text-black">: {{ strtoupper($logbook->license_plate) }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">PIC Jaga</td><td class="py-1 font-bold text-black">: {{ $logbook->pic_name }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Rute Asal</td><td class="py-1 font-bold text-black">: {{ optional($logbook->route)->origin ?? '-' }}</td></tr>
+                    <tr><td class="py-1 font-medium text-gray-600">Tujuan</td><td class="py-1 font-bold text-black">: {{ optional($logbook->route)->destination ?? '-' }}</td></tr>
                 </table>
             </div>
             
