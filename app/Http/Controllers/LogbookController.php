@@ -364,4 +364,44 @@ class LogbookController extends Controller
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ]);
     }
+
+    public function rekapPdf(Request $request) {
+        $query = Logbook::with(['route', 'cattleType', 'supplier', 'kapalManifest.kapal', 'kapalManifest.importir'])->latest();
+
+        if ($request->filled('kapal_manifest_id')) {
+            $query->where('kapal_manifest_id', $request->kapal_manifest_id);
+        }
+
+        if ($request->filled('start_date') && $request->filled('end_date') && !$request->filled('kapal_manifest_id')) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        $logbooks = $query->get();
+        $firstLogbook = $logbooks->first();
+
+        $selectedManifest = null;
+        if ($request->filled('kapal_manifest_id')) {
+            $selectedManifest = \App\Models\KapalManifest::with('kapal', 'importir')->find($request->kapal_manifest_id);
+        } elseif ($firstLogbook && $firstLogbook->kapalManifest) {
+            $selectedManifest = $firstLogbook->kapalManifest;
+        }
+
+        $namaKapal = $request->filled('nama_kapal') ? $request->nama_kapal : ($selectedManifest?->kapal?->nama_kapal ?? $firstLogbook->nama_kapal ?? '-');
+        $eta = $request->filled('eta') ? $request->eta : ($selectedManifest?->kapal?->eta ?? $firstLogbook->eta ?? '-');
+        $kade = $request->filled('kade') ? $request->kade : ($selectedManifest?->kade ?? $firstLogbook->kade ?? '-');
+        $consignee = $request->filled('consignee') ? $request->consignee : ($selectedManifest?->consignee ?? $firstLogbook->consignee ?? '-');
+        $party = $request->filled('party') ? $request->party : ($selectedManifest?->party ? $selectedManifest->party . ' EKOR' : ($firstLogbook->party ?? '-'));
+        $tipeSapi = $request->filled('tipe_sapi') ? $request->tipe_sapi : (optional($firstLogbook?->cattleType)->name ?? '-');
+
+        $lokasiInput = $request->input('lokasi_ttd');
+        $lokasiTtdText = empty($lokasiInput) ? ('Tanjung Priok, ' . date('d F Y')) : $lokasiInput;
+        $namaTtd = $request->input('nama_ttd', 'LIAN');
+
+        return view('dashboard.logbooks.rekap_pdf', compact(
+            'logbooks', 'namaKapal', 'eta', 'kade', 'consignee', 'party', 'tipeSapi', 'lokasiTtdText', 'namaTtd'
+        ));
+    }
 }

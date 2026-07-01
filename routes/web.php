@@ -21,6 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/logbooks/export', [LogbookController::class, 'export'])->name('logbooks.export');
+    Route::get('/logbooks/rekap/pdf', [LogbookController::class, 'rekapPdf'])->name('logbooks.rekapPdf');
     Route::post('/logbooks/{id}/restore', [LogbookController::class, 'restore'])->name('logbooks.restore');
     Route::resource('logbooks', LogbookController::class);
     Route::resource('routes', RouteController::class)->except(['show']);
