@@ -9,40 +9,54 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $currentMonth = now()->month;
-        $currentYear = now()->year;
+        $thirtyDaysAgo = now()->subDays(30);
 
-        $totalTonase = Logbook::whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
+        // Tonase 30 hari terakhir
+        $totalTonase = Logbook::where('status', 'Selesai')
+            ->where('created_at', '>=', $thirtyDaysAgo)
             ->sum('net_weight');
-        
-        $allCompletedThisMonth = Logbook::with('route')->where('status', 'Selesai')
-            ->whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)->get();
 
-        $totalUangJalan = $allCompletedThisMonth->sum(function($log) {
+        // Headcount sapi 30 hari terakhir
+        $totalHeadcount = Logbook::where('status', 'Selesai')
+            ->where('created_at', '>=', $thirtyDaysAgo)
+            ->sum('headcount');
+
+        // Uang jalan 30 hari terakhir
+        $allCompleted30 = Logbook::with('route')
+            ->where('status', 'Selesai')
+            ->where('created_at', '>=', $thirtyDaysAgo)
+            ->get();
+
+        $totalUangJalan = $allCompleted30->sum(function ($log) {
             return ($log->route ? $log->route->driver_money : 0) + $log->additional_costs;
         });
 
+        // Ritase truk hari ini
         $trucksToday = Logbook::whereDate('created_at', now()->format('Y-m-d'))->count();
 
+        // Ritase truk 30 hari terakhir
+        $trucks30Days = Logbook::where('created_at', '>=', $thirtyDaysAgo)->count();
+
+        // Chart data 30 hari terakhir
         $chartData = Logbook::selectRaw('DATE(created_at) as date, SUM(net_weight) as total_weight')
             ->where('status', 'Selesai')
-            ->where('created_at', '>=', now()->subDays(14))
+            ->where('created_at', '>=', $thirtyDaysAgo)
             ->groupBy('date')
             ->orderBy('date', 'asc')
             ->get();
-            
+
         $dates = $chartData->pluck('date');
         $weights = $chartData->pluck('total_weight');
 
         $stats = [
-            'total_tonase' => $totalTonase,
-            'total_uang_jalan' => $totalUangJalan,
-            'trucks_today' => $trucksToday,
-            'total_logbooks' => Logbook::count(),
-            'completed' => Logbook::where('status', 'Selesai')->count(),
-            'unweighed' => Logbook::where('status', 'Muat')->count()
+            'total_tonase'    => $totalTonase,
+            'total_headcount' => $totalHeadcount,
+            'total_uang_jalan'=> $totalUangJalan,
+            'trucks_today'    => $trucksToday,
+            'trucks_30_days'  => $trucks30Days,
+            'total_logbooks'  => Logbook::count(),
+            'completed'       => Logbook::where('status', 'Selesai')->count(),
+            'unweighed'       => Logbook::where('status', 'Muat')->count(),
         ];
 
         return view('dashboard.index', compact('stats', 'dates', 'weights'));

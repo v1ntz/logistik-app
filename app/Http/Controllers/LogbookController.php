@@ -30,7 +30,14 @@ class LogbookController extends Controller
         }
 
         $logbooks = $query->get();
-        return view('dashboard.logbooks.index', compact('logbooks'));
+
+        // Ambil logbook terbaru yang memiliki data kapal untuk auto-fill modal export
+        $latestWithShipment = Logbook::with('cattleType')
+            ->whereNotNull('nama_kapal')
+            ->latest()
+            ->first();
+
+        return view('dashboard.logbooks.index', compact('logbooks', 'latestWithShipment'));
     }
 
     public function create() {

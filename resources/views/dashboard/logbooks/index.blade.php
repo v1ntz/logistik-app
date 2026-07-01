@@ -159,32 +159,38 @@
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
                             <h3 class="text-lg leading-6 font-bold text-gray-900 border-b pb-2" id="modal-title">Parameter Kop Surat Excel</h3>
+                            @if($latestWithShipment)
+                            <p class="text-xs text-green-600 bg-green-50 border border-green-200 rounded px-3 py-2 mt-2 mb-3 font-semibold">
+                                ✅ Auto-filled dari logbook terbaru. Ubah jika diperlukan.
+                            </p>
+                            @else
                             <p class="text-xs text-gray-500 mt-1 mb-4">Kosongkan jika tidak ingin dicetak di Excel.</p>
+                            @endif
                             
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="col-span-2 sm:col-span-1">
                                     <label class="block text-xs font-bold text-gray-700 uppercase">Nama Kapal</label>
-                                    <input type="text" name="nama_kapal" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: MV. BALHA ONE">
+                                    <input type="text" name="nama_kapal" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: MV. BALHA ONE" value="{{ $latestWithShipment?->nama_kapal ?? '' }}">
                                 </div>
                                 <div class="col-span-2 sm:col-span-1">
                                     <label class="block text-xs font-bold text-gray-700 uppercase">ETA</label>
-                                    <input type="text" name="eta" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 22-Mar-26">
+                                    <input type="text" name="eta" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 22-Mar-26" value="{{ $latestWithShipment?->eta ?? '' }}">
                                 </div>
                                 <div class="col-span-2 sm:col-span-1">
                                     <label class="block text-xs font-bold text-gray-700 uppercase">Kade</label>
-                                    <input type="text" name="kade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 114">
+                                    <input type="text" name="kade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 114" value="{{ $latestWithShipment?->kade ?? '' }}">
                                 </div>
                                 <div class="col-span-2 sm:col-span-1">
                                     <label class="block text-xs font-bold text-gray-700 uppercase">Consignee</label>
-                                    <input type="text" name="consignee" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: PT. CINTA ASIH FARM">
+                                    <input type="text" name="consignee" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: PT. CINTA ASIH FARM" value="{{ $latestWithShipment?->consignee ?? '' }}">
                                 </div>
                                 <div class="col-span-2 sm:col-span-1">
                                     <label class="block text-xs font-bold text-gray-700 uppercase">Party</label>
-                                    <input type="text" name="party" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 60 EKOR">
+                                    <input type="text" name="party" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 60 EKOR" value="{{ $latestWithShipment?->party ?? '' }}">
                                 </div>
                                 <div class="col-span-2 sm:col-span-1">
                                     <label class="block text-xs font-bold text-gray-700 uppercase">Tipe Sapi</label>
-                                    <input type="text" name="tipe_sapi" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: MEDIUM HEIFERS">
+                                    <input type="text" name="tipe_sapi" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: MEDIUM HEIFERS" value="{{ optional($latestWithShipment?->cattleType)->name ?? '' }}">
                                 </div>
                                 <div class="col-span-2 sm:col-span-1">
                                     <label class="block text-xs font-bold text-gray-700 uppercase mt-2">Lokasi/Tgl TTD</label>
@@ -211,3 +217,4 @@
     </div>
 </div>
 @endsection
+
