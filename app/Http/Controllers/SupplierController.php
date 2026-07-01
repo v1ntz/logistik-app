@@ -16,13 +16,16 @@ class SupplierController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required', 'location' => 'nullable']);
-        Supplier::create($request->all());
+        $validated = $request->validate(['name' => 'required', 'location' => 'nullable']);
+        Supplier::create($validated);
         return back()->with('success', 'Importir berhasil ditambahkan.');
     }
 
     public function destroy(Supplier $supplier)
     {
+        if (\App\Models\Logbook::where('supplier_id', $supplier->id)->exists() || \App\Models\KapalManifest::where('importir_id', $supplier->id)->exists()) {
+            return redirect()->back()->with('error', 'Supplier ini masih digunakan oleh data logbook atau manifest kapal.');
+        }
         $supplier->delete();
         return back()->with('success', 'Importir dihapus.');
     }

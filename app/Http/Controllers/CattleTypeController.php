@@ -16,13 +16,16 @@ class CattleTypeController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|unique:cattle_types,name']);
-        CattleType::create($request->all());
+        $validated = $request->validate(['name' => 'required|unique:cattle_types,name']);
+        CattleType::create($validated);
         return back()->with('success', 'Jenis sapi berhasil ditambahkan.');
     }
 
     public function destroy(CattleType $cattleType)
     {
+        if (\App\Models\Logbook::where('cattle_type_id', $cattleType->id)->exists()) {
+            return redirect()->back()->with('error', 'Jenis sapi ini masih digunakan oleh data logbook.');
+        }
         $cattleType->delete();
         return back()->with('success', 'Jenis sapi dihapus.');
     }

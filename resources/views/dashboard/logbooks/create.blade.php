@@ -16,15 +16,18 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-gray-50 p-6 rounded-xl border border-gray-200">
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2">Nama Driver</label>
-                <input type="text" name="driver_name" required placeholder="Contoh: Budi Santoso" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                <input type="text" name="driver_name" value="{{ old('driver_name') }}" required placeholder="Contoh: Budi Santoso" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                @error('driver_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2">Nomor Polisi Kendaraan</label>
-                <input type="text" name="license_plate" required placeholder="Contoh: N 8820 P" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 font-bold uppercase leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                <input type="text" name="license_plate" value="{{ old('license_plate') }}" required placeholder="Contoh: N 8820 P" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 font-bold uppercase leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                @error('license_plate') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2">PIC Kendaraan <span class="text-red-500">*</span></label>
-                <input type="text" name="pic_name" required placeholder="Contoh: Pak Agus" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                <input type="text" name="pic_name" value="{{ old('pic_name') }}" required placeholder="Contoh: Pak Agus" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                @error('pic_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
         
@@ -34,9 +37,10 @@
             <select name="route_id" required class="shadow border-transparent rounded-lg w-full py-3.5 px-4 text-gray-800 font-semibold leading-tight focus:outline-none focus:ring-4 focus:ring-blue-300 bg-white transition cursor-pointer">
                 <option value="">-- Tekan untuk Memilih Rute --</option>
                 @foreach($routes as $route)
-                    <option value="{{ $route->id }}">{{ mb_strtoupper($route->origin) }} ➔ {{ mb_strtoupper($route->destination) }} (Uang Jalan: Rp {{ number_format($route->driver_money, 0, ',', '.') }})</option>
+                    <option value="{{ $route->id }}" {{ old('route_id') == $route->id ? 'selected' : '' }}>{{ mb_strtoupper($route->origin) }} ➔ {{ mb_strtoupper($route->destination) }} (Uang Jalan: Rp {{ number_format($route->driver_money, 0, ',', '.') }})</option>
                 @endforeach
             </select>
+            @error('route_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             @if($routes->isEmpty())
                 <div class="mt-3 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                   <span class="block sm:inline">Database Rute Kosong. Anda harus <a href="{{ route('routes.create') }}" class="underline font-bold">membuat rute</a> terlebih dahulu.</span>
@@ -53,7 +57,7 @@
                 @foreach($kapals as $kapal)
                     <optgroup label="🚢 {{ strtoupper($kapal->nama_kapal) }}{{ $kapal->eta ? ' (ETA: '.$kapal->eta.')' : '' }}">
                         @foreach($kapal->manifests as $manifest)
-                        <option value="{{ $manifest->id }}"
+                        <option value="{{ $manifest->id }}" {{ old('kapal_manifest_id') == $manifest->id ? 'selected' : '' }}
                             data-kapal="{{ $kapal->nama_kapal }}"
                             data-eta="{{ $kapal->eta }}"
                             data-kade="{{ $manifest->kade }}"

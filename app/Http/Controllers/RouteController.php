@@ -17,8 +17,8 @@ class RouteController extends Controller
     }
 
     public function store(Request $request) {
-        $request->validate(['origin' => 'required', 'destination' => 'required', 'driver_money' => 'required|numeric']);
-        Route::create($request->all());
+        $validated = $request->validate(['origin' => 'required', 'destination' => 'required', 'driver_money' => 'required|numeric']);
+        Route::create($validated);
         return redirect()->route('routes.index')->with('success', 'Rute ditambahkan.');
     }
 
@@ -27,8 +27,8 @@ class RouteController extends Controller
     }
 
     public function update(Request $request, Route $route) {
-        $request->validate(['origin' => 'required', 'destination' => 'required', 'driver_money' => 'required|numeric']);
-        $route->update($request->all());
+        $validated = $request->validate(['origin' => 'required', 'destination' => 'required', 'driver_money' => 'required|numeric']);
+        $route->update($validated);
         return redirect()->route('routes.index')->with('success', 'Rute diperbarui.');
     }
 

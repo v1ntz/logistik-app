@@ -29,6 +29,9 @@ class KapalController extends Controller
 
     public function destroy(Kapal $kapal)
     {
+        if (\App\Models\KapalManifest::where('kapal_id', $kapal->id)->exists()) {
+            return redirect()->back()->with('error', 'Kapal ini masih memiliki manifest yang terkait.');
+        }
         $kapal->delete();
         return back()->with('success', 'Data kapal berhasil dihapus.');
     }

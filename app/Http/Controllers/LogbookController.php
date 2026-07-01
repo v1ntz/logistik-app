@@ -41,7 +41,13 @@ class LogbookController extends Controller
         // Mengambil semua kapal untuk rekap manifest di modal export
         $kapals = \App\Models\Kapal::with(['manifests.importir'])->latest()->get();
 
-        return view('dashboard.logbooks.index', compact('logbooks', 'latestWithShipment', 'kapals'));
+        // Jumlah data yang di-arsipkan (soft deleted)
+        $trashedCount = Logbook::onlyTrashed()->count();
+
+        // Daftar jenis sapi untuk filter export
+        $cattleTypes = CattleType::orderBy('name')->get();
+
+        return view('dashboard.logbooks.index', compact('logbooks', 'latestWithShipment', 'kapals', 'trashedCount', 'cattleTypes'));
     }
 
 
@@ -55,7 +61,7 @@ class LogbookController extends Controller
         $request->validate([
             'driver_name' => 'required',
             'license_plate' => 'required',
-            'route_id' => 'required',
+            'route_id' => 'required|exists:routes,id',
             'pic_name' => 'required'
         ]);
 
@@ -94,7 +100,7 @@ class LogbookController extends Controller
             'exporter_id' => 'nullable|exists:exporters,id',
             'headcount' => 'required|integer|min:1',
             'gross_weight' => 'required|numeric|min:0',
-            'tare_weight' => 'required|numeric|min:0',
+            'tare_weight' => 'required|numeric|min:0|lte:gross_weight',
             'additional_costs' => 'nullable|numeric|min:0',
             'additional_costs_notes' => 'nullable|string',
             'nama_kapal' => 'nullable|string',

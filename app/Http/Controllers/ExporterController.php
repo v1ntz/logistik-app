@@ -16,13 +16,16 @@ class ExporterController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required', 'location' => 'nullable']);
-        Exporter::create($request->all());
+        $validated = $request->validate(['name' => 'required', 'location' => 'nullable']);
+        Exporter::create($validated);
         return back()->with('success', 'Supplier luar negeri berhasil ditambahkan.');
     }
 
     public function destroy(Exporter $exporter)
     {
+        if (\App\Models\Logbook::where('exporter_id', $exporter->id)->exists()) {
+            return redirect()->back()->with('error', 'Eksportir ini masih digunakan oleh data logbook.');
+        }
         $exporter->delete();
         return back()->with('success', 'Supplier luar negeri berhasil dihapus.');
     }

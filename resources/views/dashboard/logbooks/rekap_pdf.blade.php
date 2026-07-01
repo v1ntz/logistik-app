@@ -61,29 +61,29 @@
             <div class="grid grid-cols-2 gap-x-6 gap-y-2 bg-white border border-gray-300 rounded-lg p-4 flex-1 mr-6 text-xs">
                 <div class="flex">
                     <span class="w-[100px] font-semibold text-gray-500 uppercase">Nama Kapal</span>
-                    <span class="flex-1 font-bold text-black">: {{ strtoupper($namaKapal) }}</span>
+                    <span class="flex-1 font-bold text-black">: {{ strtoupper($namaKapal ?? '-') }}</span>
                 </div>
                 <div class="flex">
                     <span class="w-[100px] font-semibold text-gray-500 uppercase">ETA</span>
-                    <span class="flex-1 font-bold text-black">: {{ strtoupper($eta) }}</span>
+                    <span class="flex-1 font-bold text-black">: {{ strtoupper($eta ?? '-') }}</span>
                 </div>
                 <div class="flex">
                     <span class="w-[100px] font-semibold text-gray-500 uppercase">Kade</span>
-                    <span class="flex-1 font-bold text-black">: {{ strtoupper($kade) }}</span>
+                    <span class="flex-1 font-bold text-black">: {{ strtoupper($kade ?? '-') }}</span>
                 </div>
                 <div class="flex">
                     <span class="w-[100px] font-semibold text-gray-500 uppercase">Party</span>
-                    <span class="flex-1 font-bold text-black">: {{ strtoupper($party) }}</span>
+                    <span class="flex-1 font-bold text-black">: {{ strtoupper($party ?? '-') }}</span>
                 </div>
                 <div class="flex col-span-2 border-t border-gray-200 pt-2">
                     <span class="w-[100px] font-semibold text-gray-500 uppercase">Consignee</span>
-                    <span class="flex-1 font-bold text-black">: {{ strtoupper($consignee) }}</span>
+                    <span class="flex-1 font-bold text-black">: {{ strtoupper($consignee ?? '-') }}</span>
                 </div>
             </div>
             
             <!-- Badge Tipe Sapi (White Background with Border, No Fills) -->
             <div class="bg-white border border-gray-400 px-5 py-3.5 rounded-lg text-center font-black uppercase text-xs text-black tracking-wider self-center shadow-sm">
-                {{ strtoupper($tipeSapi) }}
+                {{ strtoupper($tipeSapi ?? 'SEMUA TIPE') }}
             </div>
         </div>
 

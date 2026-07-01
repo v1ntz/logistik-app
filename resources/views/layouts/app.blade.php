@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - PT. Pratama Andal Dermaga</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SweetAlert2 -->
@@ -125,11 +126,11 @@
         });
 
         @if(session('success'))
-            Toast.fire({ icon: 'success', title: "{{ session('success') }}" });
+            Toast.fire({ icon: 'success', title: {!! json_encode(session('success')) !!} });
         @endif
 
         @if(session('error'))
-            Toast.fire({ icon: 'error', title: "{{ session('error') }}" });
+            Toast.fire({ icon: 'error', title: {!! json_encode(session('error')) !!} });
         @endif
         
         // Setup Sweetalert Confirm for forms with generic class 'swal-confirm-delete'

@@ -18,7 +18,7 @@
         @else
         <a href="{{ route('logbooks.index', ['trashed' => 1]) }}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 shadow transition transform hover:-translate-y-0.5 rounded-lg flex items-center justify-center">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            Arsip Dihapus ({{ \App\Models\Logbook::onlyTrashed()->count() }})
+            Arsip Dihapus ({{ $trashedCount }})
         </a>
         @endif
         <a href="{{ route('logbooks.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow transition transform hover:-translate-y-0.5 rounded-lg flex items-center justify-center">
@@ -184,7 +184,7 @@
                                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Pilih Tipe Sapi (Opsional)</label>
                                     <select name="cattle_type_id" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">-- Semua Tipe Sapi (FDR BULL & FD HEIFERS digabung) --</option>
-                                        @foreach(\App\Models\CattleType::orderBy('name')->get() as $type)
+                                        @foreach($cattleTypes as $type)
                                             <option value="{{ $type->id }}">{{ strtoupper($type->name) }}</option>
                                         @endforeach
                                     </select>
