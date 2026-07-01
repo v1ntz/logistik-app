@@ -37,8 +37,12 @@ class LogbookController extends Controller
             ->latest()
             ->first();
 
-        return view('dashboard.logbooks.index', compact('logbooks', 'latestWithShipment'));
+        // Mengambil semua kapal untuk rekap manifest di modal export
+        $kapals = \App\Models\Kapal::with(['manifests.importir'])->latest()->get();
+
+        return view('dashboard.logbooks.index', compact('logbooks', 'latestWithShipment', 'kapals'));
     }
+
 
     public function create() {
         $routes = Route::all();
@@ -133,9 +137,13 @@ class LogbookController extends Controller
     }
 
     public function export(Request $request) {
-        $query = Logbook::with(['route', 'cattleType', 'supplier'])->latest();
+        $query = Logbook::with(['route', 'cattleType', 'supplier', 'kapalManifest.kapal', 'kapalManifest.importir'])->latest();
 
-        if ($request->filled('start_date') && $request->filled('end_date')) {
+        if ($request->filled('kapal_manifest_id')) {
+            $query->where('kapal_manifest_id', $request->kapal_manifest_id);
+        }
+
+        if ($request->filled('start_date') && $request->filled('end_date') && !$request->filled('kapal_manifest_id')) {
             $query->whereBetween('created_at', [
                 $request->start_date . ' 00:00:00',
                 $request->end_date . ' 23:59:59'
@@ -191,14 +199,22 @@ class LogbookController extends Controller
             $drawing->setWorksheet($sheet);
         }
 
-        // Ambil data default dari logbook pertama jika form kosong
+        // Ambil data default dari manifest atau logbook pertama
         $firstLogbook = $logbooks->first();
-        $defaultNamaKapal = $firstLogbook->nama_kapal ?? '';
-        $defaultEta = $firstLogbook->eta ?? '';
-        $defaultKade = $firstLogbook->kade ?? '';
-        $defaultConsignee = $firstLogbook->consignee ?? '';
-        $defaultParty = $firstLogbook->party ?? '';
-        $defaultTipeSapi = optional($firstLogbook->cattleType)->name ?? '';
+        
+        $selectedManifest = null;
+        if ($request->filled('kapal_manifest_id')) {
+            $selectedManifest = \App\Models\KapalManifest::with('kapal', 'importir')->find($request->kapal_manifest_id);
+        } elseif ($firstLogbook && $firstLogbook->kapalManifest) {
+            $selectedManifest = $firstLogbook->kapalManifest;
+        }
+
+        $defaultNamaKapal = $selectedManifest?->kapal?->nama_kapal ?? $firstLogbook->nama_kapal ?? '';
+        $defaultEta = $selectedManifest?->kapal?->eta ?? $firstLogbook->eta ?? '';
+        $defaultKade = $selectedManifest?->kade ?? $firstLogbook->kade ?? '';
+        $defaultConsignee = $selectedManifest?->consignee ?? $firstLogbook->consignee ?? '';
+        $defaultParty = $selectedManifest?->party ? $selectedManifest->party . ' EKOR' : ($firstLogbook->party ?? '');
+        $defaultTipeSapi = optional($firstLogbook?->cattleType)->name ?? '';
 
         // METADATA KAPAL DLL
         $sheet->setCellValue('A6', 'NAMA KAPAL'); $sheet->setCellValue('B6', ':'); $sheet->setCellValue('C6', strtoupper($request->input('nama_kapal', $defaultNamaKapal)));
@@ -211,6 +227,7 @@ class LogbookController extends Controller
         $sheet->setCellValue('I10', strtoupper($request->input('tipe_sapi', $defaultTipeSapi)));
         $sheet->getStyle('I10:J10')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
         $sheet->getStyle('I10:J10')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
 
         // Header Table
         $headers = ['NO', 'NO.POLISI', 'NOMOR SURAT', 'ISI', 'BROTTO', 'TARRA', 'NETTO', "JUMLAH\nEKOR", "JUMLAH\nKG", 'KET'];

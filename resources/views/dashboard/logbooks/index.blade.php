@@ -158,48 +158,71 @@
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-bold text-gray-900 border-b pb-2" id="modal-title">Parameter Kop Surat Excel</h3>
-                            @if($latestWithShipment)
-                            <p class="text-xs text-green-600 bg-green-50 border border-green-200 rounded px-3 py-2 mt-2 mb-3 font-semibold">
-                                ✅ Auto-filled dari logbook terbaru. Ubah jika diperlukan.
-                            </p>
-                            @else
-                            <p class="text-xs text-gray-500 mt-1 mb-4">Kosongkan jika tidak ingin dicetak di Excel.</p>
-                            @endif
+                            <h3 class="text-lg leading-6 font-bold text-gray-900 border-b pb-2 mb-4" id="modal-title">Export Rekap Excel</h3>
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="col-span-2 sm:col-span-1">
-                                    <label class="block text-xs font-bold text-gray-700 uppercase">Nama Kapal</label>
-                                    <input type="text" name="nama_kapal" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: MV. BALHA ONE" value="{{ $latestWithShipment?->nama_kapal ?? '' }}">
+                            <div class="space-y-4">
+                                <!-- Pilihan Manifest Kapal -->
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Pilih Manifest Kapal untuk Rekap</label>
+                                    <select name="kapal_manifest_id" id="export_manifest_select" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">-- Rekap Semua (Berdasarkan Filter Tanggal Halaman Logbook) --</option>
+                                        @foreach($kapals as $kapal)
+                                            <optgroup label="🚢 {{ strtoupper($kapal->nama_kapal) }}{{ $kapal->eta ? ' (ETA: '.$kapal->eta.')' : '' }}">
+                                                @foreach($kapal->manifests as $manifest)
+                                                    <option value="{{ $manifest->id }}">
+                                                        {{ strtoupper(optional($manifest->importir)->name) }} — Consignee: {{ $manifest->consignee ?? '-' }}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                    <p class="text-xs text-gray-500 mt-1">Sistem otomatis mendeteksi Nama Kapal, ETA, Kade, Consignee, Party, dan Tipe Sapi dari manifest yang dipilih.</p>
                                 </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <label class="block text-xs font-bold text-gray-700 uppercase">ETA</label>
-                                    <input type="text" name="eta" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 22-Mar-26" value="{{ $latestWithShipment?->eta ?? '' }}">
+
+                                <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
+                                    <div class="col-span-2 sm:col-span-1">
+                                        <label class="block text-xs font-bold text-gray-700 uppercase">Lokasi/Tgl TTD</label>
+                                        <input type="text" name="lokasi_ttd" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Tanjung Priok, {{ date('d M Y') }}" value="Tanjung Priok, {{ date('d M Y') }}">
+                                    </div>
+                                    <div class="col-span-2 sm:col-span-1">
+                                        <label class="block text-xs font-bold text-gray-700 uppercase">Nama TTD</label>
+                                        <input type="text" name="nama_ttd" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: LIAN" value="LIAN">
+                                    </div>
                                 </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <label class="block text-xs font-bold text-gray-700 uppercase">Kade</label>
-                                    <input type="text" name="kade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 114" value="{{ $latestWithShipment?->kade ?? '' }}">
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <label class="block text-xs font-bold text-gray-700 uppercase">Consignee</label>
-                                    <input type="text" name="consignee" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: PT. CINTA ASIH FARM" value="{{ $latestWithShipment?->consignee ?? '' }}">
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <label class="block text-xs font-bold text-gray-700 uppercase">Party</label>
-                                    <input type="text" name="party" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: 60 EKOR" value="{{ $latestWithShipment?->party ?? '' }}">
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <label class="block text-xs font-bold text-gray-700 uppercase">Tipe Sapi</label>
-                                    <input type="text" name="tipe_sapi" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: MEDIUM HEIFERS" value="{{ optional($latestWithShipment?->cattleType)->name ?? '' }}">
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <label class="block text-xs font-bold text-gray-700 uppercase mt-2">Lokasi/Tgl TTD</label>
-                                    <input type="text" name="lokasi_ttd" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Tanjung Priok, 22 Maret 2026">
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <label class="block text-xs font-bold text-gray-700 uppercase mt-2">Nama TTD</label>
-                                    <input type="text" name="nama_ttd" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: LIAN">
-                                </div>
+
+                                <!-- Opsi Form Manual (Dapat di-expand jika operator ingin ketik manual kop excelnya) -->
+                                <details class="group border border-gray-200 rounded-lg p-3 mt-2">
+                                    <summary class="cursor-pointer text-xs font-bold text-gray-600 hover:text-gray-900 flex justify-between items-center list-none">
+                                        <span>⚙️ Ubah Parameter Kop Manual (Opsional)</span>
+                                        <span class="transition group-open:rotate-180">▼</span>
+                                    </summary>
+                                    <div class="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-gray-150">
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label class="block text-xs font-bold text-gray-500 uppercase">Nama Kapal Manual</label>
+                                            <input type="text" name="nama_kapal" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-1.5 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-xs" placeholder="Misal: MV. BALHA ONE">
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label class="block text-xs font-bold text-gray-500 uppercase">ETA Manual</label>
+                                            <input type="text" name="eta" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-1.5 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-xs" placeholder="Misal: 22-Mar-26">
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label class="block text-xs font-bold text-gray-500 uppercase">Kade Manual</label>
+                                            <input type="text" name="kade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-1.5 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-xs" placeholder="Misal: 114">
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label class="block text-xs font-bold text-gray-500 uppercase">Consignee Manual</label>
+                                            <input type="text" name="consignee" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-1.5 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-xs" placeholder="Misal: PT. CAF">
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label class="block text-xs font-bold text-gray-500 uppercase">Party Manual</label>
+                                            <input type="text" name="party" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-1.5 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-xs" placeholder="Misal: 60 EKOR">
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label class="block text-xs font-bold text-gray-500 uppercase">Tipe Sapi Manual</label>
+                                            <input type="text" name="tipe_sapi" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-1.5 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-xs" placeholder="Misal: MEDIUM HEIFERS">
+                                        </div>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </div>
@@ -216,5 +239,6 @@
         </div>
     </div>
 </div>
+
 @endsection
 
