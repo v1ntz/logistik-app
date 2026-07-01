@@ -276,7 +276,7 @@ class LogbookController extends Controller
             $sheet->setCellValue('A' . $row, $no++);
             $sheet->setCellValue('B' . $row, strtoupper($logbook->license_plate));
             $sheet->setCellValue('C' . $row, 'SJ-' . $logbook->created_at->format('ymd') . '-' . str_pad($logbook->id, 4, '0', STR_PAD_LEFT));
-            $sheet->setCellValue('D' . $row, strtoupper(optional($logbook->cattleType)->name ?? ''));
+            $sheet->setCellValue('D' . $row, $logbook->headcount);
             $sheet->setCellValue('E' . $row, $logbook->gross_weight);
             $sheet->setCellValue('F' . $row, $logbook->tare_weight);
             $sheet->setCellValue('G' . $row, $logbook->net_weight);
