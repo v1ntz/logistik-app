@@ -62,13 +62,15 @@ class LogbookController extends Controller
         $data['status'] = 'Muat';
 
         if ($request->filled('kapal_manifest_id')) {
-            $manifest = \App\Models\KapalManifest::find($request->kapal_manifest_id);
+            $manifest = \App\Models\KapalManifest::with('kapal')->find($request->kapal_manifest_id);
             if ($manifest) {
                 $data['supplier_id'] = $manifest->importir_id; // Importir lokal dipetakan ke supplier_id
                 $data['exporter_id'] = $manifest->exporter_id; // Eksportir asing dipetakan ke exporter_id
                 $data['consignee']   = $manifest->consignee;
                 $data['kade']        = $manifest->kade;
                 $data['party']       = $manifest->party;
+                $data['nama_kapal']  = $manifest->kapal?->nama_kapal;
+                $data['eta']         = $manifest->kapal?->eta;
             }
         }
 
@@ -101,7 +103,8 @@ class LogbookController extends Controller
         ]);
         
         $net_weight = $request->gross_weight - $request->tare_weight;
-        $logbook->update([
+        
+        $updateData = [
             'supplier_id' => $request->supplier_id,
             'cattle_type_id' => $request->cattle_type_id,
             'exporter_id' => $request->exporter_id,
@@ -111,13 +114,17 @@ class LogbookController extends Controller
             'net_weight' => $net_weight,
             'additional_costs' => $request->additional_costs ?? 0,
             'additional_costs_notes' => $request->additional_costs_notes,
-            'nama_kapal' => $request->nama_kapal,
-            'eta' => $request->eta,
-            'kade' => $request->kade,
-            'consignee' => $request->consignee,
-            'party' => $request->party,
             'status' => 'Selesai'
-        ]);
+        ];
+
+        // Lindungi data kapal agar tidak tertimpa null saat confirm timbangan
+        if ($request->filled('nama_kapal')) $updateData['nama_kapal'] = $request->nama_kapal;
+        if ($request->filled('eta')) $updateData['eta'] = $request->eta;
+        if ($request->filled('kade')) $updateData['kade'] = $request->kade;
+        if ($request->filled('consignee')) $updateData['consignee'] = $request->consignee;
+        if ($request->filled('party')) $updateData['party'] = $request->party;
+
+        $logbook->update($updateData);
         return redirect()->route('logbooks.index')->with('success', 'Penimbangan selesai.');
     }
 
@@ -323,6 +330,17 @@ class LogbookController extends Controller
             $lokasiTtdText = $lokasiInput;
         }
         $sheet->setCellValue('A' . $sigRow, $lokasiTtdText);
+
+        if (file_exists(public_path('logo.png'))) {
+            $drawing2 = new Drawing();
+            $drawing2->setName('Signature Stamp');
+            $drawing2->setPath(public_path('logo.png'));
+            $drawing2->setHeight(65);
+            $drawing2->setCoordinates('B' . ($sigRow + 1));
+            $drawing2->setOffsetX(10);
+            $drawing2->setOffsetY(5);
+            $drawing2->setWorksheet($sheet);
+        }
 
         $sheet->setCellValue('A' . ($sigRow + 6), strtoupper($request->input('nama_ttd', 'LIAN')));
         $sheet->getStyle('A' . ($sigRow + 6))->getFont()->setBold(true);
