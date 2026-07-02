@@ -41,31 +41,31 @@
     @php
         // 1. Foto Hero Background (public/hero.jpg dll)
         $heroBg = 'https://images.unsplash.com/photo-1586528116311-ad8ed7c80a30?q=80&w=2070&auto=format&fit=crop';
-        foreach (['hero.jpg', 'hero.png', 'hero.webp', 'bg.jpg', 'bg.png'] as $img) {
+        foreach (['hero.jpg', 'hero.jpeg', 'hero.png', 'hero.webp', 'bg.jpg', 'bg.png'] as $img) {
             if (file_exists(public_path($img))) { $heroBg = asset($img); break; }
         }
 
         // 2. Foto Utama Tentang PAD / Company Profile (public/profile.jpg dll)
         $profileImg = 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=2070&auto=format&fit=crop';
-        foreach (['profile.jpg', 'profile.png', 'profile.webp', 'tentang.jpg', 'tentang.png', 'operasional.jpg', 'operasional.png', 'company.jpg', 'company.png', 'kantor.jpg', 'kantor.png'] as $img) {
+        foreach (['profile.jpg', 'profile.jpeg', 'profile.png', 'profile.webp', 'tentang.jpg', 'tentang.jpeg', 'tentang.png', 'operasional.jpg', 'operasional.png', 'company.jpg', 'company.png', 'kantor.jpg', 'kantor.png'] as $img) {
             if (file_exists(public_path($img))) { $profileImg = asset($img); break; }
         }
 
         // 3. Foto Layanan 1: Stevedoring (public/stevedoring.jpg dll)
         $srv1Img = 'https://images.unsplash.com/photo-1549487424-698b67f37ccb?q=80&w=2070&auto=format&fit=crop';
-        foreach (['service1.jpg', 'service1.png', 'stevedoring.jpg', 'stevedoring.png', 'layanan1.jpg'] as $img) {
+        foreach (['service1.jpg', 'service1.jpeg', 'service1.png', 'stevedoring.jpg', 'stevedoring.jpeg', 'stevedoring.png', 'layanan1.jpg'] as $img) {
             if (file_exists(public_path($img))) { $srv1Img = asset($img); break; }
         }
 
         // 4. Foto Layanan 2: Trucking (public/trucking.jpg dll)
         $srv2Img = 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2070&auto=format&fit=crop';
-        foreach (['service2.jpg', 'service2.png', 'trucking.jpg', 'trucking.png', 'layanan2.jpg'] as $img) {
+        foreach (['service2.jpg', 'service2.jpeg', 'service2.png', 'trucking.jpg', 'trucking.jpeg', 'trucking.png', 'layanan2.jpg'] as $img) {
             if (file_exists(public_path($img))) { $srv2Img = asset($img); break; }
         }
 
         // 5. Foto Layanan 3: Sistem Timbang (public/timbangan.jpg dll)
         $srv3Img = 'https://images.unsplash.com/photo-1587293852726-59118eace1a0?q=80&w=2070&auto=format&fit=crop';
-        foreach (['service3.jpg', 'service3.png', 'timbangan.jpg', 'timbangan.png', 'layanan3.jpg'] as $img) {
+        foreach (['service3.jpg', 'service3.jpeg', 'service3.png', 'timbangan.jpg', 'timbangan.jpeg', 'timbangan.png', 'layanan3.jpg'] as $img) {
             if (file_exists(public_path($img))) { $srv3Img = asset($img); break; }
         }
     @endphp
