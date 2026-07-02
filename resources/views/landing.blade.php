@@ -23,8 +23,12 @@
                         brand: {
                             50: '#f0f9ff',
                             100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
                             500: '#0ea5e9',
                             600: '#0284c7',
+                            700: '#0369a1',
                             800: '#075985',
                             900: '#0c4a6e',
                             950: '#082f49',
@@ -155,24 +159,24 @@
         </section>
 
         <!-- Stats Section (Counters) -->
-        <section class="bg-brand-950 py-12 border-b border-brand-900 relative z-20 shadow-2xl">
+        <section class="bg-brand-950 py-16 border-b border-brand-800 relative z-20 shadow-2xl">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-brand-800/50">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-brand-800/60">
                     <div data-aos="zoom-in" data-aos-delay="0">
-                        <p class="text-4xl md:text-5xl font-black text-brand-400" class="counter">12+</p>
-                        <p class="text-xs md:text-sm text-gray-400 mt-2 font-bold uppercase tracking-wider">Tahun Pengalaman</p>
+                        <p class="text-5xl md:text-6xl font-black text-sky-400 drop-shadow-[0_4px_12px_rgba(56,189,248,0.4)]">12+</p>
+                        <p class="text-xs md:text-sm text-brand-100 mt-3 font-extrabold uppercase tracking-widest">Tahun Pengalaman</p>
                     </div>
                     <div data-aos="zoom-in" data-aos-delay="100">
-                        <p class="text-4xl md:text-5xl font-black text-brand-400">98%</p>
-                        <p class="text-xs md:text-sm text-gray-400 mt-2 font-bold uppercase tracking-wider">Tingkat Ketepatan Waktu</p>
+                        <p class="text-5xl md:text-6xl font-black text-sky-400 drop-shadow-[0_4px_12px_rgba(56,189,248,0.4)]">98%</p>
+                        <p class="text-xs md:text-sm text-brand-100 mt-3 font-extrabold uppercase tracking-widest">Tingkat Ketepatan Waktu</p>
                     </div>
                     <div data-aos="zoom-in" data-aos-delay="200">
-                        <p class="text-4xl md:text-5xl font-black text-brand-400">45K+</p>
-                        <p class="text-xs md:text-sm text-gray-400 mt-2 font-bold uppercase tracking-wider">Ritase Selesai</p>
+                        <p class="text-5xl md:text-6xl font-black text-sky-400 drop-shadow-[0_4px_12px_rgba(56,189,248,0.4)]">45K+</p>
+                        <p class="text-xs md:text-sm text-brand-100 mt-3 font-extrabold uppercase tracking-widest">Ritase Selesai</p>
                     </div>
                     <div data-aos="zoom-in" data-aos-delay="300">
-                        <p class="text-4xl md:text-5xl font-black text-brand-400">50+</p>
-                        <p class="text-xs md:text-sm text-gray-400 mt-2 font-bold uppercase tracking-wider">Mitra Importir</p>
+                        <p class="text-5xl md:text-6xl font-black text-sky-400 drop-shadow-[0_4px_12px_rgba(56,189,248,0.4)]">50+</p>
+                        <p class="text-xs md:text-sm text-brand-100 mt-3 font-extrabold uppercase tracking-widest">Mitra Importir</p>
                     </div>
                 </div>
             </div>
@@ -188,13 +192,13 @@
                             <img src="{{ $profileImg }}" alt="Stevedoring sapi" class="relative rounded-2xl shadow-xl z-10 w-full h-auto object-cover border-4 border-white">
                             
                             <!-- Floating Badge -->
-                            <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl z-20 animate-pulse border border-gray-100 flex items-center hidden md:flex">
-                                <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div class="absolute -bottom-6 -left-6 !bg-white p-5 rounded-2xl shadow-[0_20px_50px_rgba(8,47,73,0.3)] z-30 border-2 border-brand-500/20 flex items-center hidden md:flex">
+                                <div class="bg-brand-600 text-white w-14 h-14 rounded-xl flex items-center justify-center mr-4 shadow-lg shadow-brand-500/30">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-500 font-bold uppercase tracking-wider">Sertifikasi</p>
-                                    <p class="font-black text-gray-900">Operasional Resmi</p>
+                                    <p class="text-xs text-brand-600 font-extrabold uppercase tracking-widest">Sertifikasi</p>
+                                    <p class="text-lg font-black text-gray-900">Operasional Resmi</p>
                                 </div>
                             </div>
                         </div>
@@ -203,10 +207,10 @@
                         <h4 class="text-brand-600 font-bold tracking-widest uppercase mb-2 text-sm">Tentang Pad</h4>
                         <h2 class="text-4xl md:text-5xl font-black text-brand-950 mb-6 leading-tight">Membangun Konektifitas Rantai Pasok Nusantara</h2>
                         <p class="text-gray-600 mb-6 text-lg leading-relaxed">
-                            Bermula dari komitmen kuat terhadap kelancaran arus barang, **PT. Pratama Andal Dermaga** secara spesifik mendedikasikan layanannya di bidang *Stevedoring* (Bongkar Muat) dan manajemen landbound logistik.
+                            Bermula dari komitmen kuat terhadap kelancaran arus barang, <strong class="font-bold text-gray-900">PT. Pratama Andal Dermaga</strong> secara spesifik mendedikasikan layanannya di bidang <em class="italic font-semibold text-brand-700">Stevedoring</em> (Bongkar Muat) dan manajemen landbound logistik.
                         </p>
                         <p class="text-gray-600 mb-8 text-lg leading-relaxed">
-                            Kami sangat diakui dalam penanganan *live cattle* (sapi impor) berkat komitmen kami terhadap Animal Welfare serta sistem *tracking* yang memastikan keakuratan muatan darat.
+                            Kami sangat diakui dalam penanganan <em class="italic font-semibold text-brand-700">live cattle</em> (sapi impor) berkat komitmen kami terhadap Animal Welfare serta sistem <em class="italic font-semibold text-brand-700">tracking</em> yang memastikan keakuratan muatan darat.
                         </p>
                         
                         <ul class="space-y-4 mb-8">
@@ -220,7 +224,7 @@
                             </li>
                             <li class="flex items-start">
                                 <svg class="w-6 h-6 text-brand-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                <span class="text-gray-700 font-medium">Sistem digital dan pelaporan *real-time*.</span>
+                                <span class="text-gray-700 font-medium">Sistem digital dan pelaporan <em class="italic font-semibold text-brand-700">real-time</em>.</span>
                             </li>
                         </ul>
                     </div>
