@@ -12,10 +12,23 @@ echo "Menunggu koneksi database..."
 MAX_RETRIES=10
 RETRY_COUNT=0
 
-until php artisan db:show --json > /dev/null 2>&1; do
+until php -r "
+try {
+    \$dsn = 'pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_DATABASE');
+    \$pdo = new PDO(\$dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'), [PDO::ATTR_TIMEOUT => 5]);
+    echo 'OK';
+} catch (Exception \$e) {
+    exit(1);
+}
+" 2>/dev/null | grep -q 'OK'; do
   RETRY_COUNT=$((RETRY_COUNT + 1))
   if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-    echo "ERROR: Database tidak dapat dihubungi setelah $MAX_RETRIES percobaan. Pastikan DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD sudah benar di Render Dashboard."
+    echo "ERROR: Database tidak dapat dihubungi setelah $MAX_RETRIES percobaan."
+    echo "  DB_HOST     = $DB_HOST"
+    echo "  DB_PORT     = $DB_PORT"
+    echo "  DB_DATABASE = $DB_DATABASE"
+    echo "  DB_USERNAME = $DB_USERNAME"
+    echo "  Pastikan variabel sudah benar di Render Dashboard."
     exit 1
   fi
   echo "  Database belum siap, mencoba lagi dalam 3 detik... ($RETRY_COUNT/$MAX_RETRIES)"
@@ -30,7 +43,17 @@ php artisan migrate --force
 
 # Menjalankan seeder hanya jika tabel users masih kosong
 echo "Mengecek data awal..."
-USER_COUNT=$(php artisan tinker --execute="echo \App\Models\User::count();" 2>/dev/null | tail -1)
+USER_COUNT=$(php -r "
+try {
+    \$dsn = 'pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_DATABASE');
+    \$pdo = new PDO(\$dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+    \$stmt = \$pdo->query('SELECT COUNT(*) FROM users');
+    echo \$stmt->fetchColumn();
+} catch (Exception \$e) {
+    echo '0';
+}
+" 2>/dev/null)
+
 if [ "$USER_COUNT" = "0" ] || [ -z "$USER_COUNT" ]; then
   echo "Menjalankan Database Seeder..."
   php artisan db:seed --force
