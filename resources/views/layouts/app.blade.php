@@ -63,10 +63,12 @@
                 </a>
 
                 <p class="px-4 pt-4 pb-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Master Data</p>
+                @if(auth()->user() && auth()->user()->isAdmin())
                 <a href="{{ route('users.index') }}" class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('users.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white' }}">
                     <svg class="w-5 h-5 mr-3 {{ request()->routeIs('users.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     Karyawan / Akun
                 </a>
+                @endif
                 <a href="{{ route('cattle-types.index') }}" class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('cattle-types.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white' }}">
                     <svg class="w-5 h-5 mr-3 {{ request()->routeIs('cattle-types.*') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                     Kategori Sapi
@@ -98,7 +100,17 @@
             <header class="bg-white/80 backdrop-blur-md sticky top-0 z-10 border-b border-slate-200 px-8 py-5 flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-slate-800 tracking-tight">@yield('title', 'Dashboard')</h1>
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full"><span class="w-2 h-2 inline-block bg-green-500 rounded-full mr-2 mb-0.5"></span>{{ auth()->user()->name ?? 'Admin' }}</span>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm font-semibold text-slate-700 bg-slate-100 px-3 py-1 rounded-full flex items-center">
+                            <span class="w-2 h-2 inline-block bg-green-500 rounded-full mr-2"></span>
+                            {{ auth()->user()->name ?? 'User' }}
+                        </span>
+                        @if(auth()->user() && auth()->user()->isAdmin())
+                            <span class="text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200 px-2.5 py-0.5 rounded-full">Admin</span>
+                        @else
+                            <span class="text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-full">Petugas</span>
+                        @endif
+                    </div>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
                         <button type="submit" class="text-xs font-bold text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-4 py-1.5 rounded-full transition shadow-sm border border-red-100 flex items-center">

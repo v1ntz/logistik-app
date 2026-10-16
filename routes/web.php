@@ -29,7 +29,10 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::resource('cattle-types', CattleTypeController::class)->except(['show']);
     Route::resource('suppliers', SupplierController::class)->except(['show']);
     Route::resource('exporters', ExporterController::class)->except(['show']);
-    Route::resource('users', UserController::class)->except(['show']);
+    // Manajemen Akun (Khusus Admin)
+    Route::middleware('admin')->group(function () {
+        Route::resource('users', UserController::class)->except(['show']);
+    });
     Route::get('/logbooks/{logbook}/print', [LogbookController::class, 'print'])->name('logbooks.print');
     // Kapal
     Route::resource('kapals', KapalController::class)->except(['show', 'edit', 'update', 'create']);

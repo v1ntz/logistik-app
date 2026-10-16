@@ -3,7 +3,7 @@
 @section('title', 'Edit Data Karyawan')
 
 @section('content')
-<div class="max-w-3xl mx-auto">
+<div class="max-w-4xl mx-auto">
     <div class="mb-6 flex items-center space-x-3 text-sm text-slate-500">
         <a href="{{ route('users.index') }}" class="hover:text-blue-600 transition">Manajemen Karyawan</a>
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
@@ -17,10 +17,10 @@
             
             <div class="p-8 space-y-8">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-800 border-b pb-2 mb-4">Informasi Profil</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <h3 class="text-lg font-bold text-slate-800 border-b pb-2 mb-4">Informasi Profil & Peran</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2">Nama Lengkap Petugas <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
                             <input type="text" name="name" value="{{ old('name', $user->name) }}" required class="w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition px-4 py-2.5 bg-slate-50">
                             @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -28,6 +28,21 @@
                             <label class="block text-sm font-bold text-slate-700 mb-2">Alamat Email <span class="text-red-500">*</span></label>
                             <input type="email" name="email" value="{{ old('email', $user->email) }}" required class="w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition px-4 py-2.5 bg-slate-50">
                             @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Role / Peran Akun <span class="text-red-500">*</span></label>
+                            @php $isLastAdmin = $user->isAdmin() && \App\Models\User::where('role', 'admin')->count() <= 1; @endphp
+                            @if($isLastAdmin)
+                                <input type="hidden" name="role" value="admin">
+                                <input type="text" value="Admin (Akun Utama)" disabled class="w-full rounded-xl border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed px-4 py-2.5 font-medium">
+                                <p class="text-[11px] text-slate-400 mt-1">Satu-satunya Admin, role tidak bisa diubah.</p>
+                            @else
+                                <select name="role" required class="w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition px-4 py-2.5 bg-slate-50 font-medium text-slate-700">
+                                    <option value="petugas" {{ old('role', $user->role) === 'petugas' ? 'selected' : '' }}>Petugas (Operasional)</option>
+                                    <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin (Akses Penuh)</option>
+                                </select>
+                            @endif
+                            @error('role') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
                 </div>
