@@ -56,24 +56,24 @@ echo "Database terhubung!"
 echo "Menjalankan migrasi Database..."
 php artisan migrate --force
 
-# Menjalankan seeder hanya jika tabel users masih kosong
+# Menjalankan seeder hanya jika tabel logbooks masih kosong
 echo "Mengecek data awal..."
-USER_COUNT=$(php -r "
+LOGBOOK_COUNT=$(php -r "
 try {
     \$dsn = 'pgsql:host=' . getenv('DB_HOST') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_DATABASE');
     \$pdo = new PDO(\$dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
-    \$stmt = \$pdo->query('SELECT COUNT(*) FROM users');
+    \$stmt = \$pdo->query('SELECT COUNT(*) FROM logbooks');
     echo \$stmt->fetchColumn();
 } catch (Exception \$e) {
     echo '0';
 }
 " 2>/dev/null)
 
-if [ "$USER_COUNT" = "0" ] || [ -z "$USER_COUNT" ]; then
-  echo "Menjalankan Database Seeder..."
+if [ "$LOGBOOK_COUNT" = "0" ] || [ -z "$LOGBOOK_COUNT" ]; then
+  echo "Menjalankan Database Seeder (30 data dummy)..."
   php artisan db:seed --force
 else
-  echo "Data sudah ada ($USER_COUNT user), seeder dilewati."
+  echo "Data logbook sudah ada ($LOGBOOK_COUNT record), seeder dilewati."
 fi
 
 # Cache setelah semua siap
