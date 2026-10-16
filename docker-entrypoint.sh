@@ -3,9 +3,28 @@ set -e
 
 echo "Menyiapkan server untuk PT PAD Logistik..."
 
+# Hapus file .env jika ada di dalam image (harus pakai env vars dari Render Dashboard)
+if [ -f ".env" ]; then
+  echo "Menghapus .env dari image, menggunakan environment variables dari Render..."
+  rm -f .env
+fi
+
+# Hapus semua config cache yang mungkin berisi kredensial lama
+rm -f bootstrap/cache/config.php
+rm -f bootstrap/cache/routes*.php
+rm -f bootstrap/cache/events.php
+
 # Membersihkan cache lama
 php artisan config:clear
 php artisan route:clear
+
+# Debug: tampilkan nilai env vars yang akan dipakai
+echo "Konfigurasi database yang digunakan:"
+echo "  DB_CONNECTION = $DB_CONNECTION"
+echo "  DB_HOST       = $DB_HOST"
+echo "  DB_PORT       = $DB_PORT"
+echo "  DB_DATABASE   = $DB_DATABASE"
+echo "  DB_USERNAME   = $DB_USERNAME"
 
 # Menunggu database PostgreSQL siap (maksimal 30 detik)
 echo "Menunggu koneksi database..."
@@ -18,17 +37,13 @@ try {
     \$pdo = new PDO(\$dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'), [PDO::ATTR_TIMEOUT => 5]);
     echo 'OK';
 } catch (Exception \$e) {
+    echo 'ERROR: ' . \$e->getMessage();
     exit(1);
 }
 " 2>/dev/null | grep -q 'OK'; do
   RETRY_COUNT=$((RETRY_COUNT + 1))
   if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
     echo "ERROR: Database tidak dapat dihubungi setelah $MAX_RETRIES percobaan."
-    echo "  DB_HOST     = $DB_HOST"
-    echo "  DB_PORT     = $DB_PORT"
-    echo "  DB_DATABASE = $DB_DATABASE"
-    echo "  DB_USERNAME = $DB_USERNAME"
-    echo "  Pastikan variabel sudah benar di Render Dashboard."
     exit 1
   fi
   echo "  Database belum siap, mencoba lagi dalam 3 detik... ($RETRY_COUNT/$MAX_RETRIES)"
@@ -61,8 +76,7 @@ else
   echo "Data sudah ada ($USER_COUNT user), seeder dilewati."
 fi
 
-# Membersihkan cache setelah tabel dibuat
-php artisan cache:clear
+# Cache setelah semua siap
 php artisan config:cache
 php artisan route:cache
 
